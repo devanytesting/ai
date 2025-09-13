@@ -8,6 +8,7 @@ import { store } from './store';
 import { useAppSelector } from './hooks/redux';
 import { AuthPage } from './pages/AuthPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { Layout } from './components/layout/Layout';
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,7 +37,9 @@ const AppContent = () => (
           } />
           <Route path="/dashboard" element={
             <ProtectedRoute>
-              <DashboardPage />
+              <Layout>
+                <DashboardPage />
+              </Layout>
             </ProtectedRoute>
           } />
           <Route path="/" element={<Navigate to="/dashboard" />} />

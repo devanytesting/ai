@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Briefcase } from 'lucide-react';
+import { Plus, Briefcase, Menu } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchJobs, setSelectedJob, postJobToSocial } from '../features/jobs/jobsSlice';
-import { Sidebar } from '../components/layout/Sidebar';
+import { Layout } from '../components/layout/Layout';
 import { JobCard } from '../components/jobs/JobCard';
+import { Job } from '../features/jobs/jobsSlice';
 import { JobDetailsModal } from '../components/modals/JobDetailsModal';
 import { AddJobModal } from '../components/modals/AddJobModal';
 import { UploadResumesModal } from '../components/modals/UploadResumesModal';
@@ -11,7 +12,12 @@ import { MatchedResumesModal } from '../components/modals/MatchedResumesModal';
 import { Button } from '../components/ui/button';
 import { useToast } from '../hooks/use-toast';
 
-export const DashboardPage: React.FC = () => {
+interface DashboardPageProps {
+  onMobileToggle?: () => void;
+  isCollapsed?: boolean;
+}
+
+export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, isCollapsed }) => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
   const { jobs, selectedJob, isLoading } = useAppSelector((state) => state.jobs);
@@ -27,7 +33,7 @@ export const DashboardPage: React.FC = () => {
     dispatch(fetchJobs());
   }, [dispatch]);
 
-  const handleViewDetails = (job: any) => {
+  const handleViewDetails = (job: Job) => {
     dispatch(setSelectedJob(job));
     setIsJobDetailsModalOpen(true);
   };
@@ -59,17 +65,24 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8">
-          <header className="flex items-center justify-between mb-8 pb-4 border-b border-border">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Job Dashboard</h1>
-              <p className="text-muted-foreground mt-1 text-sm">
-                Manage your job postings and resume applications
-              </p>
+    <div className="overflow-auto">
+      <div className="p-6 lg:p-8">
+        <header className="flex items-center justify-between mb-8 pb-4 border-b border-border">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden"
+              onClick={onMobileToggle}
+            >
+              <Menu className="w-5 h-5" />
+            </Button>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Job Dashboard</h1>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Manage your job postings and resume applications
+                </p>
+              </div>
             </div>
             
             <Button 
@@ -109,7 +122,7 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 max-w-none">
                 {jobs.map((job) => (
                   <JobCard
                     key={job.id}
@@ -124,9 +137,8 @@ export const DashboardPage: React.FC = () => {
             )}
           </section>
         </div>
-      </main>
 
-      {/* Modals */}
+        {/* Modals */}
       <AddJobModal
         isOpen={isAddJobModalOpen}
         onClose={() => setIsAddJobModalOpen(false)}
