@@ -125,7 +125,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
               <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 max-w-none">
                 {jobs.map((job) => (
                   <JobCard
-                    key={job.id}
+                    key={job.id || `job-${Math.random()}`}
                     job={job}
                     onViewDetails={handleViewDetails}
                     onUploadResumes={handleUploadResumes}

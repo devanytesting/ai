@@ -37,11 +37,11 @@ apiClient.interceptors.response.use(
 
 // API methods
 export const api = {
-  get: (url: string, config?: any) => apiClient.get(url, config),
-  post: (url: string, data?: any, config?: any) => apiClient.post(url, data, config),
-  put: (url: string, data?: any, config?: any) => apiClient.put(url, data, config),
-  patch: (url: string, data?: any, config?: any) => apiClient.patch(url, data, config),
-  delete: (url: string, config?: any) => apiClient.delete(url, config),
+  get: (url: string, config?: object) => apiClient.get(url, config),
+  post: (url: string, data?: object, config?: object) => apiClient.post(url, data, config),
+  put: (url: string, data?: object, config?: object) => apiClient.put(url, data, config),
+  patch: (url: string, data?: object, config?: object) => apiClient.patch(url, data, config),
+  delete: (url: string, config?: object) => apiClient.delete(url, config),
 };
 
 export default apiClient;

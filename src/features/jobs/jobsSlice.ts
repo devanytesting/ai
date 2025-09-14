@@ -4,11 +4,17 @@ import { api } from '../../api/client';
 export interface Job {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   experience: number;
   location: string;
   skills: string[];
-  datePosted: string;
+  datePosted?: string;
+  department?: string;
+  responsibilities?: string;
+  qualifications?: string;
+  salary_range_min?: number;
+  salary_range_max?: number;
+  employment_type?: string;
 }
 
 export interface CreateJobData {
@@ -22,6 +28,22 @@ export interface CreateJobData {
   salary_range_min: number;
   salary_range_max: number;
   employment_type: string;
+}
+
+export interface ApiJobResponse {
+  id?: string;
+  title?: string;
+  description?: string;
+  experience_required?: number;
+  location?: string;
+  skills_required?: string[];
+  responsibilities?: string;
+  qualifications?: string;
+  salary_range_min?: number;
+  salary_range_max?: number;
+  employment_type?: string;
+  department?: string;
+  datePosted?: string;
 }
 
 interface JobsState {
@@ -43,10 +65,24 @@ export const fetchJobs = createAsyncThunk(
   'jobs/fetchJobs',
   async (_, { rejectWithValue }) => {
     try {
-      // For demo purposes, return mock data
-      // In production, replace with: const response = await api.get('/jobs');
-      const { mockJobs } = await import('../../data/mockData');
-      return mockJobs;
+      const response = await api.get('/requisition/');
+      // Transform API response to match Job interface
+      const jobs: Job[] = response.data.map((job: ApiJobResponse) => ({
+        id: job.id || Date.now().toString(),
+        title: job.title || 'Untitled Job',
+        description: job.description || `${job.responsibilities || ''}\n\nQualifications:\n${job.qualifications || ''}`,
+        experience: job.experience_required || 0,
+        location: job.location || 'Location not specified',
+        skills: job.skills_required || [],
+        datePosted: job.datePosted || new Date().toISOString(),
+        department: job.department,
+        responsibilities: job.responsibilities,
+        qualifications: job.qualifications,
+        salary_range_min: job.salary_range_min,
+        salary_range_max: job.salary_range_max,
+        employment_type: job.employment_type,
+      }));
+      return jobs;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch jobs');
     }
@@ -64,12 +100,18 @@ export const createJob = createAsyncThunk(
       // Transform the response to match our Job interface
       const newJob: Job = {
         id: response.data.id || Date.now().toString(),
-        title: response.data.title,
-        description: `${response.data.responsibilities}\n\nQualifications:\n${response.data.qualifications}`,
-        experience: response.data.experience_required,
-        location: response.data.location,
-        skills: response.data.skills_required,
-        datePosted: new Date().toISOString(),
+        title: response.data.title || jobData.title,
+        description: response.data.description || `${jobData.responsibilities}\n\nQualifications:\n${jobData.qualifications}`,
+        experience: response.data.experience_required || jobData.experience_required,
+        location: response.data.location || jobData.location,
+        skills: response.data.skills_required || jobData.skills_required,
+        datePosted: response.data.datePosted || new Date().toISOString(),
+        department: response.data.department || jobData.department,
+        responsibilities: response.data.responsibilities || jobData.responsibilities,
+        qualifications: response.data.qualifications || jobData.qualifications,
+        salary_range_min: response.data.salary_range_min || jobData.salary_range_min,
+        salary_range_max: response.data.salary_range_max || jobData.salary_range_max,
+        employment_type: response.data.employment_type || jobData.employment_type,
       };
       return newJob;
     } catch (error) {

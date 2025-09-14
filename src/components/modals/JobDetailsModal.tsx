@@ -32,7 +32,7 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
       <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center justify-between">
-            <span>{job.title}</span>
+            <span>{job.title || 'Untitled Job'}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -41,29 +41,29 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
           <div className="flex items-center text-muted-foreground space-x-6">
             <div className="flex items-center">
               <Calendar className="w-4 h-4 mr-2" />
-              {formatDate(job.datePosted)}
+              {job.datePosted ? formatDate(job.datePosted) : 'No date'}
             </div>
             <div className="flex items-center">
               <MapPin className="w-4 h-4 mr-2" />
-              {job.location}
+              {job.location || 'Location not specified'}
             </div>
             <div className="flex items-center">
               <Briefcase className="w-4 h-4 mr-2" />
-              {job.experience}+ years experience
+              {job.experience || 0}+ years experience
             </div>
           </div>
 
           <div>
             <h3 className="font-semibold mb-3">Job Description</h3>
             <div className="prose prose-sm max-w-none">
-              <p className="text-foreground whitespace-pre-wrap">{job.description}</p>
+              <p className="text-foreground whitespace-pre-wrap">{job.description || 'No description available'}</p>
             </div>
           </div>
 
           <div>
             <h3 className="font-semibold mb-3">Required Skills</h3>
             <div className="flex flex-wrap gap-2">
-              {job.skills.map((skill, index) => (
+              {(job.skills || []).map((skill, index) => (
                 <Badge key={index} variant="secondary">
                   {skill}
                 </Badge>

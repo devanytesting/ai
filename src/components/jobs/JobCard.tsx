@@ -46,20 +46,20 @@ export const JobCard: React.FC<JobCardProps> = ({
       <CardHeader className="pb-4">
         <div className="space-y-2">
           <h3 className="text-xl font-bold text-card-foreground group-hover:text-primary transition-colors leading-tight">
-            {job.title}
+            {job.title || 'Untitled Job'}
           </h3>
           <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-primary" />
-              <span className="font-medium">{formatDate(job.datePosted)}</span>
+              <span className="font-medium">{job.datePosted ? formatDate(job.datePosted) : 'No date'}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-primary" />
-              <span className="font-medium">{job.location}</span>
+              <span className="font-medium">{job.location || 'Location not specified'}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Briefcase className="w-4 h-4 text-primary" />
-              <span className="font-medium">{job.experience}+ yrs</span>
+              <span className="font-medium">{job.experience || 0}+ yrs</span>
             </div>
           </div>
         </div>
@@ -69,12 +69,12 @@ export const JobCard: React.FC<JobCardProps> = ({
       <CardContent className="space-y-4">
         {/* Description */}
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-          {job.description}
+          {job.description || 'No description available'}
         </p>
 
         {/* Skills */}
         <div className="flex flex-wrap gap-2">
-          {job.skills.slice(0, 4).map((skill, index) => (
+          {(job.skills || []).slice(0, 4).map((skill, index) => (
             <span
               key={index}
               className="bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full border border-primary/20"
@@ -82,9 +82,9 @@ export const JobCard: React.FC<JobCardProps> = ({
               {skill}
             </span>
           ))}
-          {job.skills.length > 4 && (
+          {(job.skills || []).length > 4 && (
             <span className="bg-muted text-muted-foreground text-xs font-semibold px-3 py-1.5 rounded-full border border-border">
-              +{job.skills.length - 4} more
+              +{(job.skills || []).length - 4} more
             </span>
           )}
         </div>
@@ -115,13 +115,13 @@ export const JobCard: React.FC<JobCardProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-popover border border-border shadow-lg z-50 min-w-[120px]">
                 <DropdownMenuItem
-                  onClick={() => onPostToSocial(job.id, "linkedin")}
+                  onClick={() => onPostToSocial(job.id || '', "linkedin")}
                   className="cursor-pointer"
                 >
                   LinkedIn
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => onPostToSocial(job.id, "instagram")}
+                  onClick={() => onPostToSocial(job.id || '', "instagram")}
                   className="cursor-pointer"
                 >
                   Instagram
@@ -132,7 +132,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onUploadResumes(job.id)}
+              onClick={() => onUploadResumes(job.id || '')}
               className="h-9 border-green-500/30 text-green-600 hover:bg-green-500 hover:text-white flex items-center gap-1.5 font-medium"
             >
               <Upload className="w-4 h-4" />
@@ -142,7 +142,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onViewMatched(job.id)}
+              onClick={() => onViewMatched(job.id || '')}
               className="h-9 border-purple-500/30 text-purple-600 hover:bg-purple-500 hover:text-white flex items-center gap-1.5 font-medium"
             >
               <Users className="w-4 h-4" />

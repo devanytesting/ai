@@ -75,7 +75,7 @@ export const uploadResumes = createAsyncThunk(
 
       const results = await Promise.all(uploadPromises);
       return results;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to upload resumes');
     }
   }
@@ -86,11 +86,9 @@ export const fetchMatchedResumes = createAsyncThunk(
   'resumes/fetchMatched',
   async (jobId: string, { rejectWithValue }) => {
     try {
-      // For demo purposes, return mock data
-      // In production, replace with: const response = await api.get(`/jobs/${jobId}/matched-resumes`);
-      const { mockResumes } = await import('../../data/mockData');
-      return mockResumes;
-    } catch (error: any) {
+      const response = await api.get(`/requisition/${jobId}/matched-resumes`);
+      return response.data;
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch matched resumes');
     }
   }
