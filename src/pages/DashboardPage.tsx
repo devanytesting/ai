@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Briefcase, Menu, RefreshCw, FileText } from 'lucide-react';
+import { Plus, Briefcase, Menu, RefreshCw, FileText, TrendingUp, Users, Calendar, BarChart3 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchJobs, setSelectedJob, postJobToSocial } from '../features/jobs/jobsSlice';
 import { fetchJobPosts, setSelectedJobPost, publishJobPost, regenerateJobDescription } from '../features/jobPosts/jobPostsSlice';
@@ -20,6 +20,8 @@ import { DeleteJobPostModal } from '../components/modals/DeleteJobPostModal';
 import { UploadResumesModal } from '../components/modals/UploadResumesModal';
 import { MatchedResumesModal } from '../components/modals/MatchedResumesModal';
 import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
 import { useToast } from '../hooks/use-toast';
 
 interface DashboardPageProps {
@@ -141,75 +143,150 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
   };
 
   return (
-    <div className="overflow-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="p-6 lg:p-8">
-        <header className="flex items-center justify-between mb-8 pb-4 border-b border-border">
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="lg:hidden"
-              onClick={onMobileToggle}
-            >
-              <Menu className="w-5 h-5" />
-            </Button>
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="lg:hidden"
+                onClick={onMobileToggle}
+              >
+                <Menu className="w-5 h-5" />
+              </Button>
               <div>
-                <h1 className="text-3xl font-bold text-foreground">Job Dashboard</h1>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  Manage your job postings and resume applications
-                </p>
+                <h1 className="text-3xl font-bold text-slate-900">Recruitment Dashboard</h1>
+                <p className="text-slate-600 mt-1">Manage your job requisitions and posts efficiently</p>
               </div>
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button 
                 variant="outline"
                 onClick={() => dispatch(fetchJobs())}
                 disabled={isLoading}
-                className="shadow-sm"
+                className="bg-white border-slate-200 hover:bg-slate-50 shadow-sm"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
               <Button 
                 onClick={() => setIsAddJobModalOpen(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Add Job Post
+                Create Requisition
               </Button>
             </div>
-          </header>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-slate-600">Total Requisitions</p>
+                    <p className="text-2xl font-bold text-slate-900">{jobs.length}</p>
+                  </div>
+                  <div className="p-3 bg-blue-100 rounded-lg">
+                    <Briefcase className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-slate-600">Active Job Posts</p>
+                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status === 'published').length}</p>
+                  </div>
+                  <div className="p-3 bg-green-100 rounded-lg">
+                    <TrendingUp className="w-6 h-6 text-green-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-slate-600">Draft Posts</p>
+                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status === 'draft').length}</p>
+                  </div>
+                  <div className="p-3 bg-yellow-100 rounded-lg">
+                    <FileText className="w-6 h-6 text-yellow-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-slate-600">Total Applications</p>
+                    <p className="text-2xl font-bold text-slate-900">0</p>
+                  </div>
+                  <div className="p-3 bg-purple-100 rounded-lg">
+                    <Users className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
           <section>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">Job Requisitions</h2>
+                <p className="text-slate-600">Manage your internal job requirements</p>
+              </div>
+              <Button
+                onClick={() => dispatch(fetchJobs())}
+                variant="outline"
+                size="sm"
+                className="bg-white border-slate-200 hover:bg-slate-50"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
             {isLoading ? (
               <div className="flex items-center justify-center py-16">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent mx-auto mb-4"></div>
-                  <p className="text-muted-foreground font-medium">Loading jobs...</p>
+                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent mx-auto mb-4"></div>
+                  <p className="text-slate-600 font-medium">Loading requisitions...</p>
                 </div>
               </div>
             ) : jobs.length === 0 ? (
               <div className="text-center py-16">
-                <div className="max-w-md mx-auto p-8 bg-card border border-border rounded-lg shadow-sm">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Briefcase className="w-8 h-8 text-muted-foreground" />
+                <div className="max-w-md mx-auto p-8 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Briefcase className="w-8 h-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-card-foreground">No Job Posts Yet</h3>
-                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                    Get started by creating your first job posting to attract qualified candidates.
+                  <h3 className="text-xl font-semibold mb-2 text-slate-900">No Requisitions Yet</h3>
+                  <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                    Get started by creating your first job requisition to begin the hiring process.
                   </p>
                   <Button 
                     onClick={() => setIsAddJobModalOpen(true)}
-                    className="bg-primary text-primary-foreground hover:bg-primary-hover"
+                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Create First Job Post
+                    Create First Requisition
                   </Button>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 max-w-none">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {jobs.map((job) => (
                   <JobCard
                     key={job.id || `job-${Math.random()}`}
@@ -231,16 +308,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
           <section className="mt-12">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Job Posts</h2>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  Published job posts with AI-generated descriptions
-                </p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">Job Posts</h2>
+                <p className="text-slate-600">Published job listings and their performance</p>
               </div>
               <Button 
                 variant="outline"
                 onClick={() => dispatch(fetchJobPosts({ skip: 0, limit: 100 }))}
                 disabled={jobPostsLoading}
-                className="shadow-sm"
+                className="bg-white border-slate-200 hover:bg-slate-50 shadow-sm"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${jobPostsLoading ? 'animate-spin' : ''}`} />
                 Refresh
@@ -250,24 +325,31 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
             {jobPostsLoading ? (
               <div className="flex items-center justify-center py-16">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent mx-auto mb-4"></div>
-                  <p className="text-muted-foreground font-medium">Loading job posts...</p>
+                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent mx-auto mb-4"></div>
+                  <p className="text-slate-600 font-medium">Loading job posts...</p>
                 </div>
               </div>
             ) : jobPosts.length === 0 ? (
               <div className="text-center py-16">
-                <div className="max-w-md mx-auto p-8 bg-card border border-border rounded-lg shadow-sm">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FileText className="w-8 h-8 text-muted-foreground" />
+                <div className="max-w-md mx-auto p-8 bg-white border border-slate-200 rounded-xl shadow-sm">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="w-8 h-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-card-foreground">No Job Posts Yet</h3>
-                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                    Create job posts from your requisitions to publish them to external job portals.
+                  <h3 className="text-xl font-semibold mb-2 text-slate-900">No Job Posts Yet</h3>
+                  <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                    Convert your requisitions to job posts to start attracting candidates.
                   </p>
+                  <Button 
+                    onClick={() => setIsAddJobModalOpen(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create First Post
+                  </Button>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 max-w-none">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {jobPosts.map((jobPost) => (
                   <JobPostCard
                     key={jobPost.id}

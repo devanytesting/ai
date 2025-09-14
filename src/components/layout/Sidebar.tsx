@@ -80,19 +80,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-full bg-white border-r border-black/20 flex flex-col z-50 transition-all duration-300 ease-in-out",
+          "fixed left-0 top-0 h-full bg-white border-r border-slate-200 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-lg",
           sidebarWidth,
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Header */}
-        <div className="p-4 border-b border-black/20 flex items-center justify-between">
-          {!isCollapsed && <h1 className="font-bold text-xl text-black">RecruitPro</h1>}
+        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-blue-600 to-indigo-600">
+          {!isCollapsed && <h1 className="font-bold text-xl text-white">RecruitPro</h1>}
           <Button
             variant="ghost"
             size="sm"
             onClick={onToggle}
-            className="text-black hover:bg-black/10 p-2 h-8 w-8"
+            className="text-white hover:bg-white/20 p-2 h-8 w-8"
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </Button>
@@ -107,18 +107,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 variant="ghost"
                 onClick={() => setActiveItem(item.id)}
                 className={cn(
-                  "w-full justify-start h-11 transition-all duration-200 group",
+                  "w-full justify-start h-11 transition-all duration-200 group rounded-lg",
                   isCollapsed ? "px-2" : "px-3",
                   activeItem === item.id
-                    ? "bg-black text-white"
-                    : "text-black hover:bg-black/10 hover:text-black"
+                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                    : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                 )}
               >
                 <item.icon
                   className={cn(
                     "transition-colors duration-200",
                     isCollapsed ? "w-5 h-5" : "w-5 h-5 mr-3",
-                    activeItem === item.id ? "text-white" : "text-black group-hover:text-black"
+                    activeItem === item.id ? "text-blue-600" : "text-slate-500 group-hover:text-slate-700"
                   )}
                 />
                 {!isCollapsed && <span className="font-medium">{item.label}</span>}
@@ -128,7 +128,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return isCollapsed ? (
               <Tooltip key={item.id} delayDuration={300}>
                 <TooltipTrigger asChild>{button}</TooltipTrigger>
-                <TooltipContent side="right" className="bg-white text-black border border-black/20">
+                <TooltipContent side="right" className="bg-white text-slate-900 border border-slate-200 shadow-lg">
                   <p>{item.label}</p>
                 </TooltipContent>
               </Tooltip>
@@ -139,27 +139,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* User Section */}
-        <div className="p-3 border-t border-black/20">
+        <div className="p-3 border-t border-slate-200 bg-slate-50">
           {isAuthenticated ? (
             <div className="space-y-2">
               {!isCollapsed ? (
-                <div className="flex items-center space-x-3 p-2 rounded-lg bg-black/5">
+                <div className="flex items-center space-x-3 p-2 rounded-lg bg-white border border-slate-200">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="" alt={user?.name || 'User'} />
-                    <AvatarFallback className="bg-black text-white text-sm font-semibold">
+                    <AvatarFallback className="bg-blue-600 text-white text-sm font-semibold">
                       {(user?.name || 'User').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-black truncate">{user?.name || 'User'}</p>
-                    <p className="text-xs text-black/60 truncate">{user?.email || 'user@example.com'}</p>
+                    <p className="text-sm font-medium text-slate-900 truncate">{user?.name || 'User'}</p>
+                    <p className="text-xs text-slate-600 truncate">{user?.email || 'user@example.com'}</p>
                   </div>
                 </div>
               ) : (
                 <div className="flex justify-center">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="" alt={user?.name || 'User'} />
-                    <AvatarFallback className="bg-black text-white text-sm font-semibold">
+                    <AvatarFallback className="bg-blue-600 text-white text-sm font-semibold">
                       {(user?.name || 'User').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -169,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 variant="ghost"
                 onClick={handleLogout}
                 className={cn(
-                  "w-full justify-start text-black/80 hover:text-black hover:bg-red-900/10 transition-all duration-200",
+                  "w-full justify-start text-slate-700 hover:text-red-700 hover:bg-red-50 transition-all duration-200 rounded-lg",
                   isCollapsed ? "px-2" : "px-3"
                 )}
               >
@@ -180,14 +180,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ) : (
             <Button
               className={cn(
-                "w-full bg-black text-white hover:bg-black/90 transition-all duration-200",
+                "w-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 rounded-lg",
                 isCollapsed ? "px-2" : "px-3"
               )}
               variant="default"
-              onClick={handleLogout} // call logout on click
+              onClick={handleLogout}
             >
               <LogIn className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
-              {!isCollapsed && <span>Logout</span>}
+              {!isCollapsed && <span>Sign In</span>}
             </Button>
           )}
         </div>
