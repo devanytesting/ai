@@ -29,14 +29,15 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center justify-between">
             <span>{job.title}</span>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto pr-2">
+          <div className="space-y-6">
           <div className="flex items-center text-muted-foreground space-x-6">
             <div className="flex items-center">
               <Calendar className="w-4 h-4 mr-2" />
@@ -75,6 +76,7 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
               Close
             </Button>
             
+          </div>
           </div>
         </div>
       </DialogContent>

@@ -7,6 +7,8 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface AddJobModalProps {
   isOpen: boolean;
@@ -15,22 +17,31 @@ interface AddJobModalProps {
 
 export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
-  
+
   const [formData, setFormData] = useState({
     title: '',
-    experience: '',
+    department: '',
     location: '',
+    experience_required: '',
+    salary_range_min: '',
+    salary_range_max: '',
+    employment_type: 'Full-time',
+    responsibilities: '',
+    qualifications: '',
   });
-  
+
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle field changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
-    if (name === 'experience') {
+
+    // Prevent negative numbers for numeric fields
+    const numericFields = ['experience_required', 'salary_range_min', 'salary_range_max'];
+    if (numericFields.includes(name)) {
       const numValue = parseFloat(value);
-      if (value === '' || (numValue >= 0 && !isNaN(numValue))) {
+      if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
         setFormData(prev => ({ ...prev, [name]: value }));
       }
     } else {
@@ -38,6 +49,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     }
   };
 
+  // Handle Enter key for skills
   const handleSkillKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && skillInput.trim()) {
       e.preventDefault();
@@ -54,14 +66,26 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.title || !formData.location || !formData.experience) {
+
+    // Basic validation
+    const requiredFields = ['title', 'department', 'location', 'experience_required', 'responsibilities', 'qualifications'];
+    for (const field of requiredFields) {
+      if (!formData[field as keyof typeof formData]) {
+        alert(`Please fill the ${field.replace('_', ' ')} field.`);
+        return;
+      }
+    }
+
+    if (skills.length === 0) {
+      alert('Please add at least one skill.');
       return;
     }
 
     const jobData = {
-      ...formData,
-      experience: parseInt(formData.experience),
+      title: formData.title,
+      description: `${formData.responsibilities}\n\nQualifications:\n${formData.qualifications}`,
+      experience: parseFloat(formData.experience_required),
+      location: formData.location,
       skills,
     };
 
@@ -77,8 +101,14 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
   const resetForm = () => {
     setFormData({
       title: '',
-      experience: '',
+      department: '',
       location: '',
+      experience_required: '',
+      salary_range_min: '',
+      salary_range_max: '',
+      employment_type: 'Full-time',
+      responsibilities: '',
+      qualifications: '',
     });
     setSkills([]);
     setSkillInput('');
@@ -93,14 +123,16 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center justify-between">
             <span>Add New Job Post</span>
+           
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex-1 overflow-y-auto pr-2">
+          <form onSubmit={handleSubmit} className="space-y-6">
           {/* Job Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Job Title</Label>
@@ -115,17 +147,31 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
             />
           </div>
 
+          {/* Department */}
+          <div className="space-y-2">
+            <Label htmlFor="department">Department</Label>
+            <Input
+              id="department"
+              name="department"
+              value={formData.department}
+              onChange={handleInputChange}
+              placeholder="e.g., Engineering"
+              required
+              className={inputClasses}
+            />
+          </div>
+
           {/* Experience & Location */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="experience">Experience (Years)</Label>
+              <Label htmlFor="experience_required">Experience (Years)</Label>
               <Input
-                id="experience"
-                name="experience"
+                id="experience_required"
+                name="experience_required"
                 type="number"
                 min="0"
                 step="0.5"
-                value={formData.experience}
+                value={formData.experience_required}
                 onChange={handleInputChange}
                 placeholder="e.g., 3"
                 required
@@ -158,7 +204,6 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
               placeholder="Type a skill and press Enter"
               className={inputClasses}
             />
-            
             {skills.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {skills.map((skill, index) => (
@@ -179,6 +224,81 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
             )}
           </div>
 
+          {/* Responsibilities */}
+          <div className="space-y-2">
+            <Label htmlFor="responsibilities">Responsibilities</Label>
+            <Textarea
+              id="responsibilities"
+              name="responsibilities"
+              value={formData.responsibilities}
+              onChange={handleInputChange}
+              placeholder="Describe the job responsibilities"
+              required
+              className={inputClasses}
+            />
+          </div>
+
+          {/* Qualifications */}
+          <div className="space-y-2">
+            <Label htmlFor="qualifications">Qualifications</Label>
+            <Textarea
+              id="qualifications"
+              name="qualifications"
+              value={formData.qualifications}
+              onChange={handleInputChange}
+              placeholder="Required qualifications"
+              required
+              className={inputClasses}
+            />
+          </div>
+
+          {/* Salary Range & Employment Type */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="salary_range_min">Min Salary</Label>
+              <Input
+                id="salary_range_min"
+                name="salary_range_min"
+                type="number"
+                min="0"
+                value={formData.salary_range_min}
+                onChange={handleInputChange}
+                placeholder="0"
+                className={inputClasses}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="salary_range_max">Max Salary</Label>
+              <Input
+                id="salary_range_max"
+                name="salary_range_max"
+                type="number"
+                min="0"
+                value={formData.salary_range_max}
+                onChange={handleInputChange}
+                placeholder="0"
+                className={inputClasses}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="employment_type">Employment Type</Label>
+              <Select
+                value={formData.employment_type}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, employment_type: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Full-time">Full-time</SelectItem>
+                  <SelectItem value="Part-time">Part-time</SelectItem>
+                  <SelectItem value="Contract">Contract</SelectItem>
+                  <SelectItem value="Internship">Internship</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           {/* Buttons */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-border">
             <Button type="button" variant="outline" onClick={handleClose}>
@@ -188,7 +308,8 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
               Create Job Post
             </Button>
           </div>
-        </form>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
