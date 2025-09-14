@@ -9,6 +9,7 @@ import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { toast } from 'sonner';
 
 interface AddJobModalProps {
   isOpen: boolean;
@@ -95,10 +96,16 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     };
 
     try {
-      await dispatch(createJob(jobData));
+      await dispatch(createJob(jobData)).unwrap();
+      toast.success('Job requisition created successfully!', {
+        description: `"${formData.title}" has been added to your job requisitions.`,
+      });
       onClose();
       resetForm();
     } catch (error) {
+      toast.error('Failed to create job requisition', {
+        description: error as string || 'Please check your information and try again.',
+      });
       console.error('Failed to create job:', error);
     }
   };

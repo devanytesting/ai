@@ -6,6 +6,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardHeader, CardContent, CardTitle } from '../ui/card';
 import { Alert, AlertDescription } from '../ui/alert';
+import { toast } from 'sonner';
 
 interface SignInFormProps {
   onToggleMode: () => void;
@@ -23,7 +24,17 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onToggleMode }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(clearError());
-    await dispatch(signIn(formData));
+    
+    try {
+      await dispatch(signIn(formData)).unwrap();
+      toast.success('Welcome back!', {
+        description: 'You have successfully signed in to your account.',
+      });
+    } catch (error) {
+      toast.error('Sign in failed', {
+        description: error as string || 'Please check your credentials and try again.',
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

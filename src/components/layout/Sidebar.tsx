@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { signOut, clearError } from '../../features/auth/authSlice';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'sonner';
 
 
 interface SidebarProps {
@@ -33,8 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isMobileOpen = false,
   onMobileClose,
 }) => {
-  const isAuthenticated = false;
-  const user = { name: "John Doe", email: "john@example.com" };
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [activeItem, setActiveItem] = useState("Dashboard");
 
   const menuItems = [
@@ -52,9 +52,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
     // Logout function
     const handleLogout = async () => {
       try {
-        await dispatch(signOut());
+        await dispatch(signOut()).unwrap();
+        toast.success('Signed out successfully!', {
+          description: 'You have been logged out of your account.',
+        });
         navigate("/auth"); // redirect to login/auth page
       } catch (error) {
+        toast.error('Logout failed', {
+          description: 'There was an error signing you out. Please try again.',
+        });
         console.error("Logout failed:", error);
       }
     };
@@ -139,28 +145,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {!isCollapsed ? (
                 <div className="flex items-center space-x-3 p-2 rounded-lg bg-black/5">
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src="" alt={user.name} />
+                    <AvatarImage src="" alt={user?.name || 'User'} />
                     <AvatarFallback className="bg-black text-white text-sm font-semibold">
-                      {user.name.charAt(0).toUpperCase()}
+                      {(user?.name || 'User').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-black truncate">{user.name}</p>
-                    <p className="text-xs text-black/60 truncate">{user.email}</p>
+                    <p className="text-sm font-medium text-black truncate">{user?.name || 'User'}</p>
+                    <p className="text-xs text-black/60 truncate">{user?.email || 'user@example.com'}</p>
                   </div>
                 </div>
               ) : (
                 <div className="flex justify-center">
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src="" alt={user.name} />
+                    <AvatarImage src="" alt={user?.name || 'User'} />
                     <AvatarFallback className="bg-black text-white text-sm font-semibold">
-                      {user.name.charAt(0).toUpperCase()}
+                      {(user?.name || 'User').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
               )}
               <Button
                 variant="ghost"
+                onClick={handleLogout}
                 className={cn(
                   "w-full justify-start text-black/80 hover:text-black hover:bg-red-900/10 transition-all duration-200",
                   isCollapsed ? "px-2" : "px-3"

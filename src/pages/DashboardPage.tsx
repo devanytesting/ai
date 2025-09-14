@@ -15,6 +15,8 @@ import { DeleteJobModal } from '../components/modals/DeleteJobModal';
 import { CreateJobPostModal } from '../components/modals/CreateJobPostModal';
 import { JobPostDetailsModal } from '../components/modals/JobPostDetailsModal';
 import { PublishJobPostModal } from '../components/modals/PublishJobPostModal';
+import { UpdateJobPostModal } from '../components/modals/UpdateJobPostModal';
+import { DeleteJobPostModal } from '../components/modals/DeleteJobPostModal';
 import { UploadResumesModal } from '../components/modals/UploadResumesModal';
 import { MatchedResumesModal } from '../components/modals/MatchedResumesModal';
 import { Button } from '../components/ui/button';
@@ -41,11 +43,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
   const [isCreateJobPostModalOpen, setIsCreateJobPostModalOpen] = useState(false);
   const [isJobPostDetailsModalOpen, setIsJobPostDetailsModalOpen] = useState(false);
   const [isPublishJobPostModalOpen, setIsPublishJobPostModalOpen] = useState(false);
+  const [isUpdateJobPostModalOpen, setIsUpdateJobPostModalOpen] = useState(false);
+  const [isDeleteJobPostModalOpen, setIsDeleteJobPostModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [jobToEdit, setJobToEdit] = useState<Job | null>(null);
   const [jobToDelete, setJobToDelete] = useState<Job | null>(null);
   const [jobToCreatePost, setJobToCreatePost] = useState<Job | null>(null);
   const [jobPostToPublish, setJobPostToPublish] = useState<JobPost | null>(null);
+  const [jobPostToEdit, setJobPostToEdit] = useState<JobPost | null>(null);
+  const [jobPostToDelete, setJobPostToDelete] = useState<JobPost | null>(null);
 
   useEffect(() => {
     dispatch(fetchJobs());
@@ -122,6 +128,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
         variant: 'destructive',
       });
     }
+  };
+
+  const handleEditJobPost = (jobPost: JobPost) => {
+    setJobPostToEdit(jobPost);
+    setIsUpdateJobPostModalOpen(true);
+  };
+
+  const handleDeleteJobPost = (jobPost: JobPost) => {
+    setJobPostToDelete(jobPost);
+    setIsDeleteJobPostModalOpen(true);
   };
 
   return (
@@ -257,8 +273,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                     key={jobPost.id}
                     jobPost={jobPost}
                     onViewDetails={handleViewJobPostDetails}
-                    onEditJobPost={() => {}} // TODO: Implement edit job post
-                    onDeleteJobPost={() => {}} // TODO: Implement delete job post
+                    onEditJobPost={handleEditJobPost}
+                    onDeleteJobPost={handleDeleteJobPost}
                     onPublishJobPost={handlePublishJobPost}
                     onRegenerateDescription={handleRegenerateDescription}
                   />
@@ -333,6 +349,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
         onClose={() => {
           setIsPublishJobPostModalOpen(false);
           setJobPostToPublish(null);
+        }}
+      />
+
+      <UpdateJobPostModal
+        jobPost={jobPostToEdit}
+        isOpen={isUpdateJobPostModalOpen}
+        onClose={() => {
+          setIsUpdateJobPostModalOpen(false);
+          setJobPostToEdit(null);
+        }}
+      />
+
+      <DeleteJobPostModal
+        jobPost={jobPostToDelete}
+        isOpen={isDeleteJobPostModalOpen}
+        onClose={() => {
+          setIsDeleteJobPostModalOpen(false);
+          setJobPostToDelete(null);
         }}
       />
     </div>

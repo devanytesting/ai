@@ -111,32 +111,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               <span className="hidden sm:inline">View</span>
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-9 border-indigo-500/30 text-indigo-600 hover:bg-indigo-500 hover:text-white flex items-center gap-1.5 font-medium"
-                >
-                  <Share2 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Post</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-popover border border-border shadow-lg z-50 min-w-[120px]">
-                <DropdownMenuItem
-                  onClick={() => onPostToSocial(job.id || '', "linkedin")}
-                  className="cursor-pointer"
-                >
-                  LinkedIn
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => onPostToSocial(job.id || '', "instagram")}
-                  className="cursor-pointer"
-                >
-                  Instagram
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+           
 
             <Button
               variant="outline"

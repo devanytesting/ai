@@ -147,6 +147,29 @@ export const regenerateJobDescription = createAsyncThunk(
   }
 );
 
+// Generate job description using AI
+export const generateJobDescription = createAsyncThunk(
+  'jobPosts/generateJobDescription',
+  async (jobData: {
+    title: string;
+    location: string;
+    experience_required: number;
+    skills_required: string[];
+    responsibilities?: string;
+    qualifications?: string;
+    salary_range_min?: number;
+    salary_range_max?: number;
+    employment_type?: string;
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/job/generate', jobData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to generate job description');
+    }
+  }
+);
+
 const jobPostsSlice = createSlice({
   name: 'jobPosts',
   initialState,
@@ -274,6 +297,19 @@ const jobPostsSlice = createSlice({
         }
       })
       .addCase(regenerateJobDescription.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Generate description cases
+      .addCase(generateJobDescription.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(generateJobDescription.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // This action doesn't update the state directly, just returns the generated description
+      })
+      .addCase(generateJobDescription.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

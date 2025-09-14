@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { useToast } from '../../hooks/use-toast';
+import { toast } from 'sonner';
 
 interface CreateJobPostModalProps {
   requisitionId: number;
@@ -22,7 +22,6 @@ export const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   onClose,
 }) => {
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
   const { isLoading } = useAppSelector((state) => state.jobPosts);
 
   const [expiresInDays, setExpiresInDays] = useState<number>(30);
@@ -36,17 +35,14 @@ export const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
         expires_in_days: expiresInDays,
       })).unwrap();
 
-      toast({
-        title: 'Success',
-        description: 'Job post created successfully with AI-generated description!',
+      toast.success('Job post created successfully!', {
+        description: `"${requisitionTitle}" has been converted to a job post with AI-generated description.`,
       });
 
       onClose();
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to create job post. Please try again.',
-        variant: 'destructive',
+      toast.error('Failed to create job post', {
+        description: error as string || 'Please try again later.',
       });
     }
   };

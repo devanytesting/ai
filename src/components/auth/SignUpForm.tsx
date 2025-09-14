@@ -6,6 +6,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardHeader, CardContent, CardTitle } from '../ui/card';
 import { Alert, AlertDescription } from '../ui/alert';
+import { toast } from 'sonner';
 
 interface SignUpFormProps {
   onToggleMode: () => void;
@@ -25,7 +26,22 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
     e.preventDefault();
     
     dispatch(clearError());
-    // await dispatch(signUp(formData));
+    
+    try {
+      await dispatch(signUp({
+        name: formData.full_name,
+        email: formData.email,
+        password: formData.password,
+      })).unwrap();
+      
+      toast.success('Account created successfully!', {
+        description: 'Welcome to our recruitment platform. You can now start managing your job postings.',
+      });
+    } catch (error) {
+      toast.error('Sign up failed', {
+        description: error as string || 'Please check your information and try again.',
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
