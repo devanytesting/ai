@@ -120,6 +120,78 @@ export const createJob = createAsyncThunk(
   }
 );
 
+// Get single job by ID
+export const fetchJobById = createAsyncThunk(
+  'jobs/fetchJobById',
+  async (jobId: string, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/requisition/${jobId}`);
+      const job = response.data;
+      // Transform API response to match Job interface
+      const transformedJob: Job = {
+        id: job.id || jobId,
+        title: job.title || 'Untitled Job',
+        description: job.description || `${job.responsibilities || ''}\n\nQualifications:\n${job.qualifications || ''}`,
+        experience: job.experience_required || 0,
+        location: job.location || 'Location not specified',
+        skills: job.skills_required || [],
+        datePosted: job.datePosted || new Date().toISOString(),
+        department: job.department,
+        responsibilities: job.responsibilities,
+        qualifications: job.qualifications,
+        salary_range_min: job.salary_range_min,
+        salary_range_max: job.salary_range_max,
+        employment_type: job.employment_type,
+      };
+      return transformedJob;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch job');
+    }
+  }
+);
+
+// Update job async thunk
+export const updateJob = createAsyncThunk(
+  'jobs/updateJob',
+  async ({ jobId, jobData }: { jobId: string; jobData: CreateJobData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/requisition/${jobId}`, jobData);
+      // Transform the response to match our Job interface
+      const updatedJob: Job = {
+        id: response.data.id || jobId,
+        title: response.data.title || jobData.title,
+        description: response.data.description || `${jobData.responsibilities}\n\nQualifications:\n${jobData.qualifications}`,
+        experience: response.data.experience_required || jobData.experience_required,
+        location: response.data.location || jobData.location,
+        skills: response.data.skills_required || jobData.skills_required,
+        datePosted: response.data.datePosted || new Date().toISOString(),
+        department: response.data.department || jobData.department,
+        responsibilities: response.data.responsibilities || jobData.responsibilities,
+        qualifications: response.data.qualifications || jobData.qualifications,
+        salary_range_min: response.data.salary_range_min || jobData.salary_range_min,
+        salary_range_max: response.data.salary_range_max || jobData.salary_range_max,
+        employment_type: response.data.employment_type || jobData.employment_type,
+      };
+      return updatedJob;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update job');
+    }
+  }
+);
+
+// Delete job async thunk
+export const deleteJob = createAsyncThunk(
+  'jobs/deleteJob',
+  async (jobId: string, { rejectWithValue }) => {
+    try {
+      await api.delete(`/requisition/${jobId}`);
+      return jobId;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete job');
+    }
+  }
+);
+
 // Post job to social media
 export const postJobToSocial = createAsyncThunk(
   'jobs/postToSocial',
@@ -172,6 +244,54 @@ const jobsSlice = createSlice({
         state.jobs.unshift(action.payload);
       })
       .addCase(createJob.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Fetch job by ID cases
+      .addCase(fetchJobById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchJobById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.selectedJob = action.payload;
+      })
+      .addCase(fetchJobById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Update job cases
+      .addCase(updateJob.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateJob.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const index = state.jobs.findIndex(job => job.id === action.payload.id);
+        if (index !== -1) {
+          state.jobs[index] = action.payload;
+        }
+        if (state.selectedJob?.id === action.payload.id) {
+          state.selectedJob = action.payload;
+        }
+      })
+      .addCase(updateJob.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Delete job cases
+      .addCase(deleteJob.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteJob.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.jobs = state.jobs.filter(job => job.id !== action.payload);
+        if (state.selectedJob?.id === action.payload) {
+          state.selectedJob = null;
+        }
+      })
+      .addCase(deleteJob.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

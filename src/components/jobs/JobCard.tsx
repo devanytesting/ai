@@ -7,6 +7,8 @@ import {
   Share2,
   Upload,
   Users,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import { Job } from "../../features/jobs/jobsSlice";
 import { Card, CardContent, CardHeader } from "../ui/card";
@@ -24,6 +26,8 @@ interface JobCardProps {
   onUploadResumes: (jobId: string) => void;
   onViewMatched: (jobId: string) => void;
   onPostToSocial: (jobId: string, platform: "instagram" | "linkedin") => void;
+  onEditJob: (job: Job) => void;
+  onDeleteJob: (job: Job) => void;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({
@@ -32,6 +36,8 @@ export const JobCard: React.FC<JobCardProps> = ({
   onUploadResumes,
   onViewMatched,
   onPostToSocial,
+  onEditJob,
+  onDeleteJob,
 }) => {
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
@@ -147,6 +153,26 @@ export const JobCard: React.FC<JobCardProps> = ({
             >
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Matched</span>
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onEditJob(job)}
+              className="h-9 border-blue-500/30 text-blue-600 hover:bg-blue-500 hover:text-white flex items-center gap-1.5 font-medium"
+            >
+              <Edit className="w-4 h-4" />
+              <span className="hidden sm:inline">Edit</span>
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDeleteJob(job)}
+              className="h-9 border-red-500/30 text-red-600 hover:bg-red-500 hover:text-white flex items-center gap-1.5 font-medium"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Delete</span>
             </Button>
           </div>
         </div>

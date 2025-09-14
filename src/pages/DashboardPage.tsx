@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Briefcase, Menu } from 'lucide-react';
+import { Plus, Briefcase, Menu, RefreshCw } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchJobs, setSelectedJob, postJobToSocial } from '../features/jobs/jobsSlice';
 import { Layout } from '../components/layout/Layout';
@@ -7,6 +7,8 @@ import { JobCard } from '../components/jobs/JobCard';
 import { Job } from '../features/jobs/jobsSlice';
 import { JobDetailsModal } from '../components/modals/JobDetailsModal';
 import { AddJobModal } from '../components/modals/AddJobModal';
+import { UpdateJobModal } from '../components/modals/UpdateJobModal';
+import { DeleteJobModal } from '../components/modals/DeleteJobModal';
 import { UploadResumesModal } from '../components/modals/UploadResumesModal';
 import { MatchedResumesModal } from '../components/modals/MatchedResumesModal';
 import { Button } from '../components/ui/button';
@@ -24,10 +26,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
 
   // Modal states
   const [isAddJobModalOpen, setIsAddJobModalOpen] = useState(false);
+  const [isUpdateJobModalOpen, setIsUpdateJobModalOpen] = useState(false);
+  const [isDeleteJobModalOpen, setIsDeleteJobModalOpen] = useState(false);
   const [isJobDetailsModalOpen, setIsJobDetailsModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isMatchedModalOpen, setIsMatchedModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>('');
+  const [jobToEdit, setJobToEdit] = useState<Job | null>(null);
+  const [jobToDelete, setJobToDelete] = useState<Job | null>(null);
 
   useEffect(() => {
     dispatch(fetchJobs());
@@ -64,6 +70,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
     }
   };
 
+  const handleEditJob = (job: Job) => {
+    setJobToEdit(job);
+    setIsUpdateJobModalOpen(true);
+  };
+
+  const handleDeleteJob = (job: Job) => {
+    setJobToDelete(job);
+    setIsDeleteJobModalOpen(true);
+  };
+
   return (
     <div className="overflow-auto">
       <div className="p-6 lg:p-8">
@@ -85,13 +101,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
               </div>
             </div>
             
-            <Button 
-              onClick={() => setIsAddJobModalOpen(true)}
-              className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Job Post
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                onClick={() => dispatch(fetchJobs())}
+                disabled={isLoading}
+                className="shadow-sm"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button 
+                onClick={() => setIsAddJobModalOpen(true)}
+                className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Job Post
+              </Button>
+            </div>
           </header>
 
           <section>
@@ -131,6 +158,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                     onUploadResumes={handleUploadResumes}
                     onViewMatched={handleViewMatched}
                     onPostToSocial={handlePostToSocial}
+                    onEditJob={handleEditJob}
+                    onDeleteJob={handleDeleteJob}
                   />
                 ))}
               </div>
@@ -142,6 +171,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
       <AddJobModal
         isOpen={isAddJobModalOpen}
         onClose={() => setIsAddJobModalOpen(false)}
+      />
+      
+      <UpdateJobModal
+        job={jobToEdit}
+        isOpen={isUpdateJobModalOpen}
+        onClose={() => {
+          setIsUpdateJobModalOpen(false);
+          setJobToEdit(null);
+        }}
+      />
+      
+      <DeleteJobModal
+        job={jobToDelete}
+        isOpen={isDeleteJobModalOpen}
+        onClose={() => {
+          setIsDeleteJobModalOpen(false);
+          setJobToDelete(null);
+        }}
       />
       
       <JobDetailsModal
