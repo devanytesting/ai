@@ -149,7 +149,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onViewDetails(jobPost)}
-              className="h-9 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:text-green-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Eye className="w-4 h-4" />
               <span className="hidden sm:inline">View</span>
@@ -159,7 +159,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onEditJobPost(jobPost)}
-              className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Edit className="w-4 h-4" />
               <span className="hidden sm:inline">Edit</span>
@@ -169,7 +169,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onRegenerateDescription(jobPost)}
-              className="h-9 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <RefreshCw className="w-4 h-4" />
               <span className="hidden sm:inline">Regenerate</span>
@@ -180,7 +180,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-9 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 flex items-center gap-1.5 font-medium text-xs"
+                  className="h-9 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
                 >
                   <Share2 className="w-4 h-4" />
                   <span className="hidden sm:inline">Publish</span>
@@ -189,19 +189,19 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
               <DropdownMenuContent className="bg-white border border-slate-200 shadow-lg z-50 min-w-[120px]">
                 <DropdownMenuItem
                   onClick={() => onPublishJobPost(jobPost)}
-                  className="cursor-pointer hover:bg-slate-50"
+                  className="cursor-pointer hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors duration-150"
                 >
                   LinkedIn
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => onPublishJobPost(jobPost)}
-                  className="cursor-pointer hover:bg-slate-50"
+                  className="cursor-pointer hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors duration-150"
                 >
                   Indeed
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => onPublishJobPost(jobPost)}
-                  className="cursor-pointer hover:bg-slate-50"
+                  className="cursor-pointer hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors duration-150"
                 >
                   Glassdoor
                 </DropdownMenuItem>
@@ -212,7 +212,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onDeleteJobPost(jobPost)}
-              className="h-9 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 hover:text-red-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Trash2 className="w-4 h-4" />
               <span className="hidden sm:inline">Delete</span>

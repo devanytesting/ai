@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onToggle}
-            className="text-white hover:bg-white/20 p-2 h-8 w-8"
+            className="text-white hover:bg-white/20 hover:text-white p-2 h-8 w-8 transition-all duration-200 rounded-lg"
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </Button>
@@ -110,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   "w-full justify-start h-11 transition-all duration-200 group rounded-lg",
                   isCollapsed ? "px-2" : "px-3",
                   activeItem === item.id
-                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                    ? "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:text-blue-800"
                     : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                 )}
               >
@@ -180,7 +180,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ) : (
             <Button
               className={cn(
-                "w-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 rounded-lg",
+                "w-full bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transition-all duration-200 rounded-lg transform hover:scale-105",
                 isCollapsed ? "px-2" : "px-3"
               )}
               variant="default"

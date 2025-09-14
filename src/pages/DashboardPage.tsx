@@ -168,14 +168,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                 variant="outline"
                 onClick={() => dispatch(fetchJobs())}
                 disabled={isLoading}
-                className="bg-white border-slate-200 hover:bg-slate-50 shadow-sm"
+                className="bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm transition-all duration-200"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
               <Button 
                 onClick={() => setIsAddJobModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-blue-600 hover:bg-blue-700 hover:shadow-lg text-white shadow-md transition-all duration-200 transform hover:scale-105"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Requisition
@@ -249,15 +249,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Job Requisitions</h2>
                 <p className="text-slate-600">Manage your internal job requirements</p>
               </div>
-              <Button
-                onClick={() => dispatch(fetchJobs())}
-                variant="outline"
-                size="sm"
-                className="bg-white border-slate-200 hover:bg-slate-50"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
-              </Button>
+            <Button
+              onClick={() => dispatch(fetchJobs())}
+              variant="outline"
+              size="sm"
+              className="bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all duration-200"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
             </div>
             {isLoading ? (
               <div className="flex items-center justify-center py-16">
@@ -278,7 +278,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                   </p>
                   <Button 
                     onClick={() => setIsAddJobModalOpen(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-blue-600 hover:bg-blue-700 hover:shadow-lg text-white shadow-md transition-all duration-200 transform hover:scale-105"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Create First Requisition
@@ -315,7 +315,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                 variant="outline"
                 onClick={() => dispatch(fetchJobPosts({ skip: 0, limit: 100 }))}
                 disabled={jobPostsLoading}
-                className="bg-white border-slate-200 hover:bg-slate-50 shadow-sm"
+                className="bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm transition-all duration-200"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${jobPostsLoading ? 'animate-spin' : ''}`} />
                 Refresh
@@ -341,7 +341,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                   </p>
                   <Button 
                     onClick={() => setIsAddJobModalOpen(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-green-600 hover:bg-green-700 hover:shadow-lg text-white shadow-md transition-all duration-200 transform hover:scale-105"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Create First Post

@@ -111,7 +111,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onViewDetails(job)}
-              className="h-9 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Eye className="w-4 h-4" />
               <span className="hidden sm:inline">View</span>
@@ -121,7 +121,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onEditJob(job)}
-              className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Edit className="w-4 h-4" />
               <span className="hidden sm:inline">Edit</span>
@@ -131,7 +131,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onCreateJobPost(job)}
-              className="h-9 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:text-green-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Create Post</span>
@@ -141,7 +141,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onUploadResumes(job.id || '')}
-              className="h-9 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Upload className="w-4 h-4" />
               <span className="hidden sm:inline">Upload</span>
@@ -151,7 +151,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onViewMatched(job.id || '')}
-              className="h-9 border-orange-200 text-orange-700 hover:bg-orange-50 hover:border-orange-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-orange-200 text-orange-700 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Matches</span>
@@ -161,7 +161,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onDeleteJob(job)}
-              className="h-9 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 flex items-center gap-1.5 font-medium text-xs"
+              className="h-9 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 hover:text-red-800 flex items-center gap-1.5 font-medium text-xs transition-all duration-200"
             >
               <Trash2 className="w-4 h-4" />
               <span className="hidden sm:inline">Delete</span>
