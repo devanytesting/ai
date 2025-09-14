@@ -25,7 +25,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
     e.preventDefault();
     
     dispatch(clearError());
-    await dispatch(signUp(formData));
+    // await dispatch(signUp(formData));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

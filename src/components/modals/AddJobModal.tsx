@@ -83,10 +83,15 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
 
     const jobData = {
       title: formData.title,
-      description: `${formData.responsibilities}\n\nQualifications:\n${formData.qualifications}`,
-      experience: parseFloat(formData.experience_required),
+      department: formData.department,
       location: formData.location,
-      skills,
+      experience_required: parseFloat(formData.experience_required),
+      skills_required: skills,
+      responsibilities: formData.responsibilities,
+      qualifications: formData.qualifications,
+      salary_range_min: parseFloat(formData.salary_range_min) || 0,
+      salary_range_max: parseFloat(formData.salary_range_max) || 0,
+      employment_type: formData.employment_type,
     };
 
     try {

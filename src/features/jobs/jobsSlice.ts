@@ -13,10 +13,15 @@ export interface Job {
 
 export interface CreateJobData {
   title: string;
-  description: string;
-  experience: number;
+  department: string;
   location: string;
-  skills: string[];
+  experience_required: number;
+  skills_required: string[];
+  responsibilities: string;
+  qualifications: string;
+  salary_range_min: number;
+  salary_range_max: number;
+  employment_type: string;
 }
 
 interface JobsState {
@@ -42,7 +47,7 @@ export const fetchJobs = createAsyncThunk(
       // In production, replace with: const response = await api.get('/jobs');
       const { mockJobs } = await import('../../data/mockData');
       return mockJobs;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch jobs');
     }
   }
@@ -53,15 +58,21 @@ export const createJob = createAsyncThunk(
   'jobs/createJob',
   async (jobData: CreateJobData, { rejectWithValue }) => {
     try {
-      // For demo purposes, create a mock job with current date
-      // In production, replace with: const response = await api.post('/jobs', jobData);
+      // Call the actual API endpoint
+      const response = await api.post('/requisition/', jobData);
+      
+      // Transform the response to match our Job interface
       const newJob: Job = {
-        ...jobData,
-        id: Date.now().toString(),
+        id: response.data.id || Date.now().toString(),
+        title: response.data.title,
+        description: `${response.data.responsibilities}\n\nQualifications:\n${response.data.qualifications}`,
+        experience: response.data.experience_required,
+        location: response.data.location,
+        skills: response.data.skills_required,
         datePosted: new Date().toISOString(),
       };
       return newJob;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to create job');
     }
   }
@@ -74,7 +85,7 @@ export const postJobToSocial = createAsyncThunk(
     try {
       const response = await api.post(`/jobs/${jobId}/post`, { platform });
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to post job');
     }
   }
