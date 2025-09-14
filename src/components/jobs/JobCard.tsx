@@ -9,6 +9,7 @@ import {
   Users,
   Edit,
   Trash2,
+  FileText,
 } from "lucide-react";
 import { Job } from "../../features/jobs/jobsSlice";
 import { Card, CardContent, CardHeader } from "../ui/card";
@@ -28,6 +29,7 @@ interface JobCardProps {
   onPostToSocial: (jobId: string, platform: "instagram" | "linkedin") => void;
   onEditJob: (job: Job) => void;
   onDeleteJob: (job: Job) => void;
+  onCreateJobPost: (job: Job) => void;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({
@@ -38,6 +40,7 @@ export const JobCard: React.FC<JobCardProps> = ({
   onPostToSocial,
   onEditJob,
   onDeleteJob,
+  onCreateJobPost,
 }) => {
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
@@ -153,6 +156,16 @@ export const JobCard: React.FC<JobCardProps> = ({
             >
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Matched</span>
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onCreateJobPost(job)}
+              className="h-9 border-orange-500/30 text-orange-600 hover:bg-orange-500 hover:text-white flex items-center gap-1.5 font-medium"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Create Post</span>
             </Button>
 
             <Button

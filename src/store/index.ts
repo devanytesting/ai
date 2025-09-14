@@ -5,12 +5,13 @@ import { combineReducers } from '@reduxjs/toolkit';
 import authSlice from '../features/auth/authSlice';
 import jobsSlice from '../features/jobs/jobsSlice';
 import resumesSlice from '../features/resumes/resumesSlice';
+import jobPostsSlice from '../features/jobPosts/jobPostsSlice';
 
 // Persist configuration
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'jobs', 'resumes'], // Persist all slices
+  whitelist: ['auth', 'jobs', 'resumes', 'jobPosts'], // Persist all slices
 };
 
 // Combine reducers
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   auth: authSlice,
   jobs: jobsSlice,
   resumes: resumesSlice,
+  jobPosts: jobPostsSlice,
 });
 
 // Create persisted reducer
