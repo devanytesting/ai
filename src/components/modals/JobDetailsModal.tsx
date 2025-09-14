@@ -33,9 +33,6 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>{job.title}</span>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
           </DialogTitle>
         </DialogHeader>
 
@@ -77,9 +74,7 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
             <Button variant="outline" onClick={onClose}>
               Close
             </Button>
-            <Button>
-              Edit Job
-            </Button>
+            
           </div>
         </div>
       </DialogContent>

@@ -20,21 +20,32 @@ const initialState: AuthState = {
   token: localStorage.getItem('authToken'),
   isLoading: false,
   error: null,
-  // isAuthenticated: !!localStorage.getItem('authToken'),
-  isAuthenticated: true,
-
+  isAuthenticated: !!localStorage.getItem('authToken'),
 };
 
 // Sign up async thunk
 export const signUp = createAsyncThunk(
   'auth/signUp',
-  async (userData: { name: string; email: string; password: string }, { rejectWithValue }) => {
+  async (
+    userData: { name: string; email: string; password: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await api.post('/auth/signup', userData);
+      const response = await api.post('/auth/register/', userData);
       const { user, token } = response.data;
+
+      // Save token
       localStorage.setItem('authToken', token);
-      return { user, token };
-    } catch (error: any) {
+
+      // Map API response to AuthState user
+      const mappedUser: User = {
+        id: user.id.toString(),
+        email: user.email,
+        name: user.name,
+      };
+
+      return { user: mappedUser, token };
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Sign up failed');
     }
   }
@@ -45,11 +56,19 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await api.post('/auth/signin', credentials);
-      const { user, token } = response.data;
-      localStorage.setItem('authToken', token);
-      return { user, token };
-    } catch (error: any) {
+      const response = await api.post('/auth/login', credentials);
+      const { user_id, user_email, access_token } = response.data;
+
+      localStorage.setItem('authToken', access_token);
+
+      const user: User = {
+        id: user_id.toString(),
+        email: user_email,
+        name: '', // API doesn’t return name on login
+      };
+
+      return { user, token: access_token };
+    } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Sign in failed');
     }
   }
@@ -70,7 +89,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Sign up cases
+      // Sign up
       .addCase(signUp.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -85,7 +104,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Sign in cases
+
+      // Sign in
       .addCase(signIn.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -100,7 +120,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Sign out cases
+
+      // Sign out
       .addCase(signOut.fulfilled, (state) => {
         state.user = null;
         state.token = null;

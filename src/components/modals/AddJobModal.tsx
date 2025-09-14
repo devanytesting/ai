@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { X, Plus, Trash2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useAppDispatch } from '../../hooks/redux';
 import { createJob } from '../../features/jobs/jobsSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 
 interface AddJobModalProps {
@@ -21,17 +20,15 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     title: '',
     experience: '',
     location: '',
-    description: '',
   });
   
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
     if (name === 'experience') {
-      // Only allow non-negative numbers
       const numValue = parseFloat(value);
       if (value === '' || (numValue >= 0 && !isNaN(numValue))) {
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -58,7 +55,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.location || !formData.description || !formData.experience) {
+    if (!formData.title || !formData.location || !formData.experience) {
       return;
     }
 
@@ -82,7 +79,6 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
       title: '',
       experience: '',
       location: '',
-      description: '',
     });
     setSkills([]);
     setSkillInput('');
@@ -93,19 +89,19 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     resetForm();
   };
 
+  const inputClasses = "border border-gray-300 focus:outline-none";
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Add New Job Post</span>
-            <Button variant="ghost" size="sm" onClick={handleClose}>
-              <X className="w-4 h-4" />
-            </Button>
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Job Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Job Title</Label>
             <Input
@@ -115,9 +111,11 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
               onChange={handleInputChange}
               placeholder="e.g., Senior Frontend Developer"
               required
+              className={inputClasses}
             />
           </div>
 
+          {/* Experience & Location */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="experience">Experience (Years)</Label>
@@ -131,6 +129,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
                 onChange={handleInputChange}
                 placeholder="e.g., 3"
                 required
+                className={inputClasses}
               />
             </div>
 
@@ -143,23 +142,12 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
                 onChange={handleInputChange}
                 placeholder="e.g., San Francisco, CA"
                 required
+                className={inputClasses}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Job Description</Label>
-            <Textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              placeholder="Describe the role, responsibilities, and requirements..."
-              className="min-h-[120px]"
-              required
-            />
-          </div>
-
+          {/* Skills */}
           <div className="space-y-2">
             <Label htmlFor="skills">Skills</Label>
             <Input
@@ -168,6 +156,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
               onChange={(e) => setSkillInput(e.target.value)}
               onKeyPress={handleSkillKeyPress}
               placeholder="Type a skill and press Enter"
+              className={inputClasses}
             />
             
             {skills.length > 0 && (
@@ -190,6 +179,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
             )}
           </div>
 
+          {/* Buttons */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-border">
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancel

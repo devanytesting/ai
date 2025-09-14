@@ -16,22 +16,16 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
   const { isLoading, error } = useAppSelector((state) => state.auth);
   
   const [formData, setFormData] = useState({
-    name: '',
+    full_name: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (formData.password !== formData.confirmPassword) {
-      return;
-    }
-    
     dispatch(clearError());
-    const { confirmPassword, ...signUpData } = formData;
-    await dispatch(signUp(signUpData));
+    await dispatch(signUp(formData));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,12 +50,12 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
           )}
           
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
+            <Label htmlFor="full_name">Full Name</Label>
             <Input
-              id="name"
-              name="name"
+              id="full_name"
+              name="full_name"
               type="text"
-              value={formData.name}
+              value={formData.full_name}
               onChange={handleChange}
               placeholder="Enter your full name"
               required
@@ -94,27 +88,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
             />
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              required
-            />
-          </div>
-          
-          {formData.password !== formData.confirmPassword && formData.confirmPassword && (
-            <p className="text-destructive text-sm">Passwords do not match</p>
-          )}
-          
           <Button 
             type="submit" 
             className="w-full" 
-            disabled={isLoading || formData.password !== formData.confirmPassword}
+            disabled={isLoading}
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>

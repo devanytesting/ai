@@ -44,7 +44,7 @@ export const JobCard: React.FC<JobCardProps> = ({
     <Card className="group shadow-md hover:shadow-lg transition-all duration-200 border border-border rounded-xl bg-card overflow-hidden">
       {/* Header */}
       <CardHeader className="pb-4">
-        <div className="space-y-3">
+        <div className="space-y-2">
           <h3 className="text-xl font-bold text-card-foreground group-hover:text-primary transition-colors leading-tight">
             {job.title}
           </h3>
@@ -59,7 +59,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             </div>
             <div className="flex items-center gap-1.5">
               <Briefcase className="w-4 h-4 text-primary" />
-              <span className="font-medium">{job.experience}+ years</span>
+              <span className="font-medium">{job.experience}+ yrs</span>
             </div>
           </div>
         </div>
@@ -89,14 +89,14 @@ export const JobCard: React.FC<JobCardProps> = ({
           )}
         </div>
 
-        {/* Action Buttons - Single Clean Row */}
+        {/* Action Buttons */}
         <div className="pt-4 border-t border-border">
-          <div className="grid grid-cols-4 gap-2">
+          <div className="flex flex-wrap gap-2 justify-start">
             <Button
               variant="outline"
               size="sm"
               onClick={() => onViewDetails(job)}
-              className="h-9 border-primary/30 text-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center gap-1.5 font-medium"
+              className="h-9 border-primary/30 text-primary hover:bg-primary hover:text-white flex items-center gap-1.5 font-medium"
             >
               <Eye className="w-4 h-4" />
               <span className="hidden sm:inline">View</span>
@@ -107,7 +107,7 @@ export const JobCard: React.FC<JobCardProps> = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-9 border-indigo-500/30 text-indigo-600 hover:bg-indigo-500 hover:text-white transition-all duration-200 flex items-center justify-center gap-1.5 font-medium"
+                  className="h-9 border-indigo-500/30 text-indigo-600 hover:bg-indigo-500 hover:text-white flex items-center gap-1.5 font-medium"
                 >
                   <Share2 className="w-4 h-4" />
                   <span className="hidden sm:inline">Post</span>
@@ -133,7 +133,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onUploadResumes(job.id)}
-              className="h-9 border-green-500/30 text-green-600 hover:bg-green-500 hover:text-white transition-all duration-200 flex items-center justify-center gap-1.5 font-medium"
+              className="h-9 border-green-500/30 text-green-600 hover:bg-green-500 hover:text-white flex items-center gap-1.5 font-medium"
             >
               <Upload className="w-4 h-4" />
               <span className="hidden sm:inline">Upload</span>
@@ -143,7 +143,7 @@ export const JobCard: React.FC<JobCardProps> = ({
               variant="outline"
               size="sm"
               onClick={() => onViewMatched(job.id)}
-              className="h-9 border-purple-500/30 text-purple-600 hover:bg-purple-500 hover:text-white transition-all duration-200 flex items-center justify-center gap-1.5 font-medium"
+              className="h-9 border-purple-500/30 text-purple-600 hover:bg-purple-500 hover:text-white flex items-center gap-1.5 font-medium"
             >
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Matched</span>

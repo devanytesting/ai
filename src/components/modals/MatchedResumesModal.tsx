@@ -61,9 +61,7 @@ export const MatchedResumesModal: React.FC<MatchedResumesModalProps> = ({
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Matched Resumes</span>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
+           
           </DialogTitle>
         </DialogHeader>
 
