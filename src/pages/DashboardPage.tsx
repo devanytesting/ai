@@ -204,7 +204,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-600">Active Job Posts</p>
-                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status === 'published').length}</p>
+                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status && jp.status.toLowerCase() === 'published').length}</p>
                   </div>
                   <div className="p-3 bg-green-100 rounded-lg">
                     <TrendingUp className="w-6 h-6 text-green-600" />
@@ -218,7 +218,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-600">Draft Posts</p>
-                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status === 'draft').length}</p>
+                    <p className="text-2xl font-bold text-slate-900">{jobPosts.filter(jp => jp.status && jp.status.toLowerCase() === 'draft').length}</p>
                   </div>
                   <div className="p-3 bg-yellow-100 rounded-lg">
                     <FileText className="w-6 h-6 text-yellow-600" />
