@@ -8,6 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './store';
 import { useAppSelector } from './hooks/redux';
 import { AuthPage } from './pages/AuthPage';
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { Layout } from './components/layout/Layout';
 import NotFound from "./pages/NotFound";
@@ -16,7 +18,7 @@ const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
 };
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
@@ -31,9 +33,15 @@ const AppContent = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/auth" element={
+          <Route path="/auth" element={<Navigate to="/signin" />} />
+          <Route path="/signin" element={
             <PublicRoute>
-              <AuthPage />
+              <SignInPage />
+            </PublicRoute>
+          } />
+          <Route path="/signup" element={
+            <PublicRoute>
+              <SignUpPage />
             </PublicRoute>
           } />
           <Route path="/dashboard" element={
@@ -43,7 +51,7 @@ const AppContent = () => (
               </Layout>
             </ProtectedRoute>
           } />
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Navigate to="/signin" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
