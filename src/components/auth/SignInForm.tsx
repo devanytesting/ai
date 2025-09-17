@@ -47,11 +47,13 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onToggleMode }) => {
   return (
     <Card className="w-full max-w-md mx-auto overflow-hidden bg-white/90 backdrop-blur">
       <div className="h-28 bg-gradient-to-r from-blue-100 to-blue-300 flex items-center justify-center">
-        <img src="/favicon.ico" alt="Logo" className="h-10 w-10 rounded" />
+        <div className="h-12 w-12 rounded-full bg-white/80 flex items-center justify-center shadow">
+          <Shield className="h-6 w-6 text-blue-600" />
+        </div>
       </div>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
-          <LogIn className="w-5 h-5" />
+          <LogIn className="w-5 h-5 text-blue-600" />
           Sign In
         </CardTitle>
         <p className="text-muted-foreground">Access your recruitment dashboard</p>
@@ -123,11 +125,13 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onToggleMode }) => {
             <div className="h-px bg-border w-full" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Button type="button" variant="outline">
-              <Globe className="w-4 h-4 mr-2" /> Google
+            <Button type="button" variant="outline" className="justify-center hover:border-primary">
+              <Globe className="w-4 h-4 mr-2 text-blue-600" />
+              Continue with Google
             </Button>
-            <Button type="button" variant="outline">
-              <Shield className="w-4 h-4 mr-2" /> Microsoft
+            <Button type="button" variant="outline" className="justify-center hover:border-primary">
+              <Shield className="w-4 h-4 mr-2 text-blue-600" />
+              Continue with Microsoft
             </Button>
           </div>
           

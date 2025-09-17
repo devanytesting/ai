@@ -54,11 +54,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
   return (
     <Card className="w-full max-w-md mx-auto overflow-hidden bg-white/90 backdrop-blur">
       <div className="h-28 bg-gradient-to-r from-blue-100 to-blue-300 flex items-center justify-center">
-        <img src="/favicon.ico" alt="Logo" className="h-10 w-10 rounded" />
+        <div className="h-12 w-12 rounded-full bg-white/80 flex items-center justify-center shadow">
+          <UserPlus className="h-6 w-6 text-blue-600" />
+        </div>
       </div>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
-          <UserPlus className="w-5 h-5" />
+          <UserPlus className="w-5 h-5 text-blue-600" />
           Create Account
         </CardTitle>
         <p className="text-muted-foreground">Join our recruitment platform</p>
@@ -139,10 +141,12 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
             <div className="h-px bg-border w-full" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" className="justify-center hover:border-primary">
+              <span className="h-4 w-4 bg-blue-500 rounded-sm mr-2" />
               Continue with Google
             </Button>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" className="justify-center hover:border-primary">
+              <span className="h-4 w-4 bg-blue-600 rounded-sm mr-2" />
               Continue with Microsoft
             </Button>
           </div>

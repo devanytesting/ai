@@ -20,10 +20,10 @@
     --popover-foreground: 0 0% 0%;
     --overlay: 0 0% 0%;
     
-    /* Primary - Pure Black */
-    --primary: 0 0% 0%;
+    /* Primary - Blue */
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 0 0% 15%;
+    --primary-hover: 217 91% 55%;
     
     /* Secondary - Clean Light Gray */
     --secondary: 0 0% 95%;
@@ -35,10 +35,10 @@
     --muted-foreground: 0 0% 40%;
     --muted-dark: 0 0% 88%;
     
-    /* Accent - Minimal for Actions */
-    --accent: 0 0% 20%;
+    /* Accent - Subtle Blue */
+    --accent: 213 94% 68%;
     --accent-foreground: 0 0% 100%;
-    --accent-hover: 0 0% 15%;
+    --accent-hover: 213 94% 62%;
     
     /* Status Colors - Monochrome */
     --success: 0 0% 20%;
@@ -49,11 +49,11 @@
     --destructive-foreground: 0 0% 100%;
     
     /* Borders & Inputs - Clean Lines */
-    --border: 0 0% 88%;
-    --border-hover: 0 0% 75%;
+    --border: 214 32% 91%;
+    --border-hover: 215 20% 65%;
     --input: 0 0% 100%;
-    --input-border: 0 0% 82%;
-    --ring: 0 0% 0%;
+    --input-border: 215 16% 70%;
+    --ring: 217 91% 60%;
     
     /* Shadows - Subtle */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
@@ -74,12 +74,12 @@
     /* Sidebar - Clean White */
     --sidebar-background: 0 0% 99%;
     --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 0%;
     --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 0%;
+    --sidebar-ring: 217 91% 60%;
   }
   
   /* Dark Mode - Inverted Black & White */
