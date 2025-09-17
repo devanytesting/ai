@@ -2,7 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { uploadResumes, clearUploadProgress } from '../../features/resumes/resumesSlice';
+import { clearUploadProgress } from '../../features/resumes/resumesSlice';
+import { analyzeResumesBulk, analyzeResumeSingle } from '../../features/resumeAnalysis/resumeAnalysisSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
@@ -36,7 +37,14 @@ export const UploadResumesModal: React.FC<UploadResumesModalProps> = ({
     
     if (validFiles.length > 0) {
       setUploadedFiles(prev => [...prev, ...validFiles]);
-      dispatch(uploadResumes(validFiles));
+      if (jobId) {
+        const requisitionId = parseInt(jobId);
+        if (validFiles.length === 1) {
+          dispatch(analyzeResumeSingle({ requisitionId, file: validFiles[0] }));
+        } else {
+          dispatch(analyzeResumesBulk({ requisitionId, files: validFiles }));
+        }
+      }
     }
   }, [dispatch]);
 

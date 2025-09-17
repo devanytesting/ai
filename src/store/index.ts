@@ -6,12 +6,13 @@ import authSlice from '../features/auth/authSlice';
 import jobsSlice from '../features/jobs/jobsSlice';
 import resumesSlice from '../features/resumes/resumesSlice';
 import jobPostsSlice from '../features/jobPosts/jobPostsSlice';
+import resumeAnalysisSlice from '../features/resumeAnalysis/resumeAnalysisSlice';
 
 // Persist configuration
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'jobs', 'resumes', 'jobPosts'], // Persist all slices
+  whitelist: ['auth', 'jobs', 'resumes', 'jobPosts', 'resumeAnalysis'], // Persist all slices
 };
 
 // Combine reducers
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   jobs: jobsSlice,
   resumes: resumesSlice,
   jobPosts: jobPostsSlice,
+  resumeAnalysis: resumeAnalysisSlice,
 });
 
 // Create persisted reducer
