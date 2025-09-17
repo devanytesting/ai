@@ -29,7 +29,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
     
     try {
       await dispatch(signUp({
-        name: formData.full_name,
+        full_name: formData.full_name,
         email: formData.email,
         password: formData.password,
       })).unwrap();
