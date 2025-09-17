@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { signUp, clearError } from '../../features/auth/authSlice';
+import { useAppDispatch } from '../../hooks/redux';
+import { signUp } from '../../features/auth/authSlice';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardHeader, CardContent, CardTitle } from '../ui/card';
-import { Alert, AlertDescription } from '../ui/alert';
+import { UserRound, Mail, Lock, UserPlus, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
+import { Checkbox } from '../ui/checkbox';
 
 interface SignUpFormProps {
   onToggleMode: () => void;
@@ -14,18 +15,17 @@ interface SignUpFormProps {
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.auth);
+  const isLoading = false; // Keep UI messaging out of Redux
   
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    dispatch(clearError());
     
     try {
       await dispatch(signUp({
@@ -52,56 +52,77 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto overflow-hidden bg-white/90 backdrop-blur">
+      <div className="h-28 bg-gradient-to-r from-blue-100 to-blue-300 flex items-center justify-center">
+        <img src="/favicon.ico" alt="Logo" className="h-10 w-10 rounded" />
+      </div>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+        <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
+          <UserPlus className="w-5 h-5" />
+          Create Account
+        </CardTitle>
         <p className="text-muted-foreground">Join our recruitment platform</p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
           
           <div className="space-y-2">
             <Label htmlFor="full_name">Full Name</Label>
-            <Input
-              id="full_name"
-              name="full_name"
-              type="text"
-              value={formData.full_name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              required
-            />
+            <div className="relative">
+              <UserRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="full_name"
+                name="full_name"
+                type="text"
+                value={formData.full_name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                className="pl-9"
+                required
+              />
+            </div>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
+            <div className="relative">
+              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="pl-9"
+                required
+              />
+            </div>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+            <div className="relative">
+              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="pl-9 pr-9"
+                required
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                onClick={() => setShowPassword((s) => !s)}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
           
           <Button 
@@ -111,6 +132,25 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>
+
+          <div className="flex items-center gap-3">
+            <div className="h-px bg-border w-full" />
+            <span className="text-xs text-muted-foreground">OR</span>
+            <div className="h-px bg-border w-full" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Button type="button" variant="outline">
+              Continue with Google
+            </Button>
+            <Button type="button" variant="outline">
+              Continue with Microsoft
+            </Button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox id="terms" required />
+            <Label htmlFor="terms" className="text-sm text-muted-foreground">I agree to the Terms & Privacy</Label>
+          </div>
           
           <div className="text-center">
             <Button 

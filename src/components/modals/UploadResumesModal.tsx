@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Upload, X, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { clearUploadProgress } from '../../features/resumes/resumesSlice';
+import { useToast } from "../ui/use-toast";
 import { analyzeResumesBulk, analyzeResumeSingle } from '../../features/resumeAnalysis/resumeAnalysisSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
@@ -20,7 +21,9 @@ export const UploadResumesModal: React.FC<UploadResumesModalProps> = ({
   jobId,
 }) => {
   const dispatch = useAppDispatch();
-  const { uploadProgress, isLoading } = useAppSelector((state) => state.resumes);
+  const { uploadProgress } = useAppSelector((state) => state.resumes);
+  const analysisLoading = useAppSelector((state) => (state as any).resumeAnalysis.isLoading) as boolean;
+  const { toast } = useToast();
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -40,9 +43,17 @@ export const UploadResumesModal: React.FC<UploadResumesModalProps> = ({
       if (jobId) {
         const requisitionId = parseInt(jobId);
         if (validFiles.length === 1) {
-          dispatch(analyzeResumeSingle({ requisitionId, file: validFiles[0] }));
+          toast({ title: 'Analyzing resume...', description: validFiles[0].name });
+          dispatch(analyzeResumeSingle({ requisitionId, file: validFiles[0] }))
+            .unwrap()
+            .then(() => toast({ title: 'Analysis completed', description: `${validFiles[0].name} analyzed.` }))
+            .catch((e) => toast({ title: 'Analysis failed', description: String(e), variant: 'destructive' as any }));
         } else {
-          dispatch(analyzeResumesBulk({ requisitionId, files: validFiles }));
+          toast({ title: 'Analyzing resumes...', description: `${validFiles.length} file(s)` });
+          dispatch(analyzeResumesBulk({ requisitionId, files: validFiles }))
+            .unwrap()
+            .then(() => toast({ title: 'Analysis completed', description: `${validFiles.length} files analyzed.` }))
+            .catch((e) => toast({ title: 'Analysis failed', description: String(e), variant: 'destructive' as any }));
         }
       }
     }
@@ -153,12 +164,29 @@ export const UploadResumesModal: React.FC<UploadResumesModalProps> = ({
             <Button variant="outline" onClick={handleClose}>
               {allCompleted ? 'Done' : 'Cancel'}
             </Button>
-            
-            {allCompleted && (
-              <Button onClick={handleClose}>
-                View Matched Resumes
-              </Button>
-            )}
+            <Button
+              variant="secondary"
+              disabled={uploadedFiles.length === 0 || analysisLoading || !jobId}
+              onClick={() => {
+                if (!jobId || uploadedFiles.length === 0) return;
+                const requisitionId = parseInt(jobId);
+                toast({ title: 'Analyzing resumes...', description: `${uploadedFiles.length} file(s) are being processed.` });
+                if (uploadedFiles.length === 1) {
+                  dispatch(analyzeResumeSingle({ requisitionId, file: uploadedFiles[0] }))
+                    .unwrap()
+                    .then(() => toast({ title: 'Analysis completed', description: `${uploadedFiles[0].name} analyzed.` }))
+                    .catch((e) => toast({ title: 'Analysis failed', description: String(e), variant: 'destructive' as any }));
+                } else {
+                  dispatch(analyzeResumesBulk({ requisitionId, files: uploadedFiles }))
+                    .unwrap()
+                    .then(() => toast({ title: 'Analysis completed', description: `${uploadedFiles.length} files analyzed.` }))
+                    .catch((e) => toast({ title: 'Analysis failed', description: String(e), variant: 'destructive' as any }));
+                }
+              }}
+            >
+              {analysisLoading ? 'Matching…' : 'Match Now'}
+            </Button>
+            <Button onClick={handleClose}>View Matched Resumes</Button>
           </div>
           </div>
         </div>
