@@ -1,3 +1,4 @@
+// Modal: create a new job requisition with skills capture
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useAppDispatch } from '../../hooks/redux';
@@ -11,6 +12,11 @@ import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from 'sonner';
 
+/**
+ * Props for AddJobModal
+ * - isOpen: show/hide dialog
+ * - onClose: close handler (also resets form)
+ */
 interface AddJobModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -19,6 +25,7 @@ interface AddJobModalProps {
 export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
 
+  // Local form state for job fields
   const [formData, setFormData] = useState({
     title: '',
     department: '',
@@ -35,6 +42,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
   const [skillInput, setSkillInput] = useState('');
 
   // Handle field changes
+  // Update text/number fields with basic validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
@@ -51,6 +59,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
   };
 
   // Handle Enter key for skills
+  // Add a skill on Enter; prevents duplicates
   const handleSkillKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && skillInput.trim()) {
       e.preventDefault();
@@ -61,10 +70,12 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     }
   };
 
+  // Remove a skill pill
   const removeSkill = (skillToRemove: string) => {
     setSkills(prev => prev.filter(skill => skill !== skillToRemove));
   };
 
+  // Submit: validate and dispatch createJob
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -110,6 +121,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     }
   };
 
+  // Reset all local state values
   const resetForm = () => {
     setFormData({
       title: '',
@@ -126,6 +138,7 @@ export const AddJobModal: React.FC<AddJobModalProps> = ({ isOpen, onClose }) => 
     setSkillInput('');
   };
 
+  // Close dialog and reset form data
   const handleClose = () => {
     onClose();
     resetForm();

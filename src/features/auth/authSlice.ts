@@ -1,3 +1,4 @@
+// Authentication slice: sign up/in/out and state management
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../api/client';
 
@@ -7,6 +8,9 @@ export interface User {
   name: string;
 }
 
+/**
+ * Authentication slice state
+ */
 interface AuthState {
   user: User | null;
   token: string | null;
@@ -15,6 +19,7 @@ interface AuthState {
   isAuthenticated: boolean;
 }
 
+// Initial auth state derived from localStorage token
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem('authToken'),
@@ -23,7 +28,7 @@ const initialState: AuthState = {
   isAuthenticated: !!localStorage.getItem('authToken'),
 };
 
-// Sign up async thunk
+// Sign up: register user then persist token and user
 export const signUp = createAsyncThunk(
   'auth/signUp',
   async (
@@ -51,7 +56,7 @@ export const signUp = createAsyncThunk(
   }
 );
 
-// Sign in async thunk
+// Sign in: authenticate and map response into state
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
@@ -74,7 +79,7 @@ export const signIn = createAsyncThunk(
   }
 );
 
-// Sign out async thunk
+// Sign out: clear token and reset auth
 export const signOut = createAsyncThunk('auth/signOut', async () => {
   localStorage.removeItem('authToken');
 });

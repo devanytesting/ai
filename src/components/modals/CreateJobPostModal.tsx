@@ -1,3 +1,4 @@
+// Modal: convert a requisition into a job post with expiration
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { createJobPost } from '../../features/jobPosts/jobPostsSlice';
@@ -8,6 +9,9 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from 'sonner';
 
+/**
+ * Props for CreateJobPostModal
+ */
 interface CreateJobPostModalProps {
   requisitionId: number;
   requisitionTitle: string;
@@ -24,8 +28,10 @@ export const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.jobPosts);
 
+  // Dropdown state for expiration period
   const [expiresInDays, setExpiresInDays] = useState<number>(30);
 
+  // Submit: dispatch createJobPost and show feedback
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -47,6 +53,7 @@ export const CreateJobPostModal: React.FC<CreateJobPostModalProps> = ({
     }
   };
 
+  // Close and reset local state
   const handleClose = () => {
     setExpiresInDays(30);
     onClose();

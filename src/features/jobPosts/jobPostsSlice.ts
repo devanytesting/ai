@@ -1,6 +1,15 @@
+// Job posts slice: CRUD and AI-assisted description generation
+/**
+ * State and async logic for managing job posts.
+ * Includes creating from requisitions, publishing to external portals,
+ * fetching, updating, deleting, and AI description generation utilities.
+ */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../api/client';
 
+/**
+ * Normalized Job Post returned by the API
+ */
 export interface JobPost {
   id: number;
   requisition_id: number;
@@ -21,11 +30,17 @@ export interface JobPost {
   expires_at: string;
 }
 
+/**
+ * Payload to create a Job Post from an existing requisition
+ */
 export interface CreateJobPostData {
   requisition_id: number;
   expires_in_days: number;
 }
 
+/**
+ * Partial update payload for a Job Post
+ */
 export interface UpdateJobPostData {
   title?: string;
   description?: string;
@@ -38,10 +53,16 @@ export interface UpdateJobPostData {
   status?: string;
 }
 
+/**
+ * Data to publish a Job Post to external portals
+ */
 export interface PublishJobPostData {
   portals: string[];
 }
 
+/**
+ * Slice state for job posts: list, selection and async flags
+ */
 interface JobPostsState {
   jobPosts: JobPost[];
   selectedJobPost: JobPost | null;
@@ -49,6 +70,9 @@ interface JobPostsState {
   error: string | null;
 }
 
+/**
+ * Initial state for the jobPosts slice
+ */
 const initialState: JobPostsState = {
   jobPosts: [],
   selectedJobPost: null,
@@ -56,7 +80,10 @@ const initialState: JobPostsState = {
   error: null,
 };
 
-// Create job post from requisition
+/**
+ * Create a Job Post from a requisition.
+ * Calls POST /job-post/ with requisition and expiry settings.
+ */
 export const createJobPost = createAsyncThunk(
   'jobPosts/createJobPost',
   async (jobPostData: CreateJobPostData, { rejectWithValue }) => {
@@ -69,7 +96,10 @@ export const createJobPost = createAsyncThunk(
   }
 );
 
-// Fetch all job posts
+/**
+ * Fetch a paginated list of Job Posts.
+ * Default is skip=0, limit=100.
+ */
 export const fetchJobPosts = createAsyncThunk(
   'jobPosts/fetchJobPosts',
   async ({ skip = 0, limit = 100 }: { skip?: number; limit?: number } = {}, { rejectWithValue }) => {
@@ -82,7 +112,9 @@ export const fetchJobPosts = createAsyncThunk(
   }
 );
 
-// Fetch single job post by ID
+/**
+ * Fetch a single Job Post by id.
+ */
 export const fetchJobPostById = createAsyncThunk(
   'jobPosts/fetchJobPostById',
   async (jobPostId: number, { rejectWithValue }) => {
@@ -95,7 +127,9 @@ export const fetchJobPostById = createAsyncThunk(
   }
 );
 
-// Update job post
+/**
+ * Update a Job Post with partial payload.
+ */
 export const updateJobPost = createAsyncThunk(
   'jobPosts/updateJobPost',
   async ({ jobPostId, jobPostData }: { jobPostId: number; jobPostData: UpdateJobPostData }, { rejectWithValue }) => {
@@ -108,7 +142,9 @@ export const updateJobPost = createAsyncThunk(
   }
 );
 
-// Delete job post
+/**
+ * Delete a Job Post by id.
+ */
 export const deleteJobPost = createAsyncThunk(
   'jobPosts/deleteJobPost',
   async (jobPostId: number, { rejectWithValue }) => {
@@ -121,7 +157,9 @@ export const deleteJobPost = createAsyncThunk(
   }
 );
 
-// Publish job post to external portals
+/**
+ * Publish a Job Post to specified external portals.
+ */
 export const publishJobPost = createAsyncThunk(
   'jobPosts/publishJobPost',
   async ({ jobPostId, publishData }: { jobPostId: number; publishData: PublishJobPostData }, { rejectWithValue }) => {
@@ -134,7 +172,10 @@ export const publishJobPost = createAsyncThunk(
   }
 );
 
-// Regenerate job description using AI
+/**
+ * Regenerate a Job Post description using server-side AI.
+ * Returns the new description string.
+ */
 export const regenerateJobDescription = createAsyncThunk(
   'jobPosts/regenerateJobDescription',
   async (jobPostId: number, { rejectWithValue }) => {
@@ -147,7 +188,10 @@ export const regenerateJobDescription = createAsyncThunk(
   }
 );
 
-// Generate job description using AI
+/**
+ * Generate a new job description from provided job attributes using AI.
+ * This thunk resolves with the generated text (does not mutate state directly).
+ */
 export const generateJobDescription = createAsyncThunk(
   'jobPosts/generateJobDescription',
   async (jobData: {
@@ -170,16 +214,29 @@ export const generateJobDescription = createAsyncThunk(
   }
 );
 
+/**
+ * Slice definition: reducers update selection and clear errors;
+ * extraReducers handle async lifecycle for thunks above.
+ */
 const jobPostsSlice = createSlice({
   name: 'jobPosts',
   initialState,
   reducers: {
+    /**
+     * Set the currently selected job post (for detail view/edit modals)
+     */
     setSelectedJobPost: (state, action) => {
       state.selectedJobPost = action.payload;
     },
+    /**
+     * Clear selection state
+     */
     clearSelectedJobPost: (state) => {
       state.selectedJobPost = null;
     },
+    /**
+     * Reset the error flag (useful after showing a toast)
+     */
     clearError: (state) => {
       state.error = null;
     },

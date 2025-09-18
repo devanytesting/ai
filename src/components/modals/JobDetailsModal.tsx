@@ -1,3 +1,4 @@
+// Modal: read-only view of a job requisition details
 import React from 'react';
 import { Calendar, MapPin, Briefcase, X } from 'lucide-react';
 import { Job } from '../../features/jobs/jobsSlice';
@@ -5,6 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 
+/**
+ * Props for JobDetailsModal
+ */
 interface JobDetailsModalProps {
   job: Job | null;
   isOpen: boolean;
@@ -18,6 +22,7 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
 }) => {
   if (!job) return null;
 
+  // Pretty-print the posted date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',

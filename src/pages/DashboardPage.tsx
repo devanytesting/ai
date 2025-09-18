@@ -1,3 +1,4 @@
+// Main dashboard: lists requisitions and job posts, manages modal flows
 import React, { useEffect, useState } from 'react';
 import { Plus, Briefcase, Menu, RefreshCw, FileText, TrendingUp, Users, Calendar, BarChart3 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -24,6 +25,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { useToast } from '../hooks/use-toast';
 
+/**
+ * Props injected from Layout to control mobile sidebar
+ */
 interface DashboardPageProps {
   onMobileToggle?: () => void;
   isCollapsed?: boolean;
@@ -55,6 +59,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
   const [jobPostToEdit, setJobPostToEdit] = useState<JobPost | null>(null);
   const [jobPostToDelete, setJobPostToDelete] = useState<JobPost | null>(null);
 
+  // On mount: fetch requisitions and job posts
   useEffect(() => {
     dispatch(fetchJobs());
     dispatch(fetchJobPosts({ skip: 0, limit: 100 }));
@@ -75,6 +80,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
     setIsMatchedModalOpen(true);
   };
 
+  // Post a job to a social platform (stub API)
   const handlePostToSocial = async (jobId: string, platform: 'instagram' | 'linkedin') => {
     try {
       await dispatch(postJobToSocial({ jobId, platform }));
@@ -116,6 +122,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onMobileToggle, is
     setIsPublishJobPostModalOpen(true);
   };
 
+  // Trigger server-side regeneration of job description via AI
   const handleRegenerateDescription = async (jobPost: JobPost) => {
     try {
       await dispatch(regenerateJobDescription(jobPost.id)).unwrap();

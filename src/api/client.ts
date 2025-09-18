@@ -1,6 +1,7 @@
+// Axios API client: base URL, auth token injection, and error handling
 import axios from 'axios';
 
-// Create centralized Axios instance
+// Create centralized Axios instance used across the app
 const apiClient = axios.create({
   baseURL: 'http://localhost:8000', // Replace with your actual API base URL
   timeout: 10000,
@@ -9,7 +10,7 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor: attach Bearer token if present
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -23,7 +24,7 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
+// Response interceptor: handle 401 by clearing token and redirecting
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -35,7 +36,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// API methods
+// Convenience wrappers for HTTP methods
 export const api = {
   get: (url: string, config?: object) => apiClient.get(url, config),
   post: (url: string, data?: object, config?: object) => apiClient.post(url, data, config),

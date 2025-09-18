@@ -1,3 +1,4 @@
+// Sidebar component: navigation + user section with collapse support
 import React, { useState } from "react";
 import {
   Users,
@@ -21,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
 
 
+// Props control collapsed state and mobile visibility
 interface SidebarProps {
   isCollapsed?: boolean;
   onToggle?: () => void;
@@ -34,9 +36,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isMobileOpen = false,
   onMobileClose,
 }) => {
+  // Auth state from Redux store
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  // Track which menu item is currently active (local UI state)
   const [activeItem, setActiveItem] = useState("Dashboard");
 
+  // Define sidebar navigation items and their icons
   const menuItems = [
     { icon: BarChart3, label: "Dashboard", id: "Dashboard" },
     { icon: Briefcase, label: "Job Posts", id: "Job Posts" },
@@ -49,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-    // Logout function
+    // Handle sign-out by dispatching auth action and navigating to auth page
     const handleLogout = async () => {
       try {
         await dispatch(signOut()).unwrap();
@@ -65,11 +70,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }
     };
 
+  // Compute width utility class based on collapsed state
   const sidebarWidth = isCollapsed ? "w-16" : "w-64";
 
   return (
     <TooltipProvider>
-      {/* Mobile overlay */}
+      {/* Mobile overlay: click to close when sidebar is open on small screens */}
       {isMobileOpen && (
         <div
           className="fixed inset-0 bg-black/10 z-40 lg:hidden"
@@ -77,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar container */}
       <aside
         className={cn(
           "fixed left-0 top-0 h-full bg-white border-r border-slate-200 flex flex-col z-50 transition-all duration-300 ease-in-out shadow-lg",
@@ -85,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        {/* Header */}
+        {/* Header: brand + collapse toggle */}
         <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-blue-600 to-indigo-600">
           {!isCollapsed && <h1 className="font-bold text-xl text-white">RecruitPro</h1>}
           <Button
@@ -98,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </Button>
         </div>
 
-        {/* Navigation Menu */}
+        {/* Navigation menu: list of routes */}
         <nav className="flex-1 p-3 space-y-2">
           {menuItems.map((item) => {
             const button = (
@@ -138,7 +144,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* User Section */}
+        {/* User section: shows profile and sign out if authenticated, else sign in CTA */}
         <div className="p-3 border-t border-slate-200 bg-slate-50">
           {isAuthenticated ? (
             <div className="space-y-2">

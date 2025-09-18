@@ -1,3 +1,4 @@
+// 404 page with auto-redirect countdown
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks/redux";
@@ -10,10 +11,12 @@ const NotFound = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [seconds, setSeconds] = useState(5);
 
+  // Log missing route for diagnostics
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
 
+  // Start countdown and redirect to appropriate page
   useEffect(() => {
     const timer = setInterval(() => setSeconds((s) => (s > 0 ? s - 1 : 0)), 1000);
     const redirect = setTimeout(() => {

@@ -1,3 +1,4 @@
+// Resumes slice: uploads with progress and matched resumes
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../api/client';
 
@@ -10,12 +11,18 @@ export interface Resume {
   status: 'uploaded' | 'processing' | 'matched';
 }
 
+/**
+ * Per-file upload progress model for UI feedback
+ */
 export interface UploadProgress {
   fileName: string;
   progress: number;
   status: 'uploading' | 'completed' | 'error';
 }
 
+/**
+ * Slice state for resume uploads and matched results
+ */
 interface ResumesState {
   resumes: Resume[];
   matchedResumes: Resume[];
@@ -32,7 +39,7 @@ const initialState: ResumesState = {
   error: null,
 };
 
-// Upload resumes async thunk
+// Upload resumes: report per-file progress
 export const uploadResumes = createAsyncThunk(
   'resumes/uploadResumes',
   async (files: File[], { dispatch, rejectWithValue }) => {

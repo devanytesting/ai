@@ -1,3 +1,4 @@
+// Resume analysis slice: single/bulk analysis and summaries per requisition
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from '../../api/client';
 import { updateUploadProgress } from '../resumes/resumesSlice';
@@ -37,6 +38,9 @@ export interface AnalysisSummary {
   top_candidates?: unknown[];
 }
 
+/**
+ * Slice state for resume analysis results and summaries
+ */
 interface ResumeAnalysisState {
   byRequisition: Record<number, ResumeAnalysisItem[]>;
   byId: Record<number, ResumeAnalysisItem>;

@@ -1,9 +1,11 @@
+// Combined sign-in/sign-up page with marketing panel
 import React, { useState } from 'react';
 import { SignInForm } from '../components/auth/SignInForm';
 import { SignUpForm } from '../components/auth/SignUpForm';
 import { BrainCircuit, Briefcase, ShieldCheck, Users, Sparkles } from 'lucide-react';
 
 export const AuthPage: React.FC = () => {
+  // Toggle between sign-in and sign-up forms
   const [isSignUp, setIsSignUp] = useState(false);
 
   const toggleMode = () => {

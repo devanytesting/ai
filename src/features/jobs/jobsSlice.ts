@@ -1,3 +1,4 @@
+// Jobs slice: requisition CRUD and mapping API -> UI model
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../api/client';
 
@@ -46,6 +47,9 @@ export interface ApiJobResponse {
   datePosted?: string;
 }
 
+/**
+ * Slice state for jobs list and selection
+ */
 interface JobsState {
   jobs: Job[];
   selectedJob: Job | null;
@@ -60,7 +64,7 @@ const initialState: JobsState = {
   error: null,
 };
 
-// Fetch jobs async thunk
+// Fetch jobs: list all requisitions
 export const fetchJobs = createAsyncThunk(
   'jobs/fetchJobs',
   async (_, { rejectWithValue }) => {
@@ -89,7 +93,7 @@ export const fetchJobs = createAsyncThunk(
   }
 );
 
-// Create job async thunk
+// Create job: post new requisition
 export const createJob = createAsyncThunk(
   'jobs/createJob',
   async (jobData: CreateJobData, { rejectWithValue }) => {
@@ -150,7 +154,7 @@ export const fetchJobById = createAsyncThunk(
   }
 );
 
-// Update job async thunk
+// Update job
 export const updateJob = createAsyncThunk(
   'jobs/updateJob',
   async ({ jobId, jobData }: { jobId: string; jobData: CreateJobData }, { rejectWithValue }) => {
@@ -179,7 +183,7 @@ export const updateJob = createAsyncThunk(
   }
 );
 
-// Delete job async thunk
+// Delete job
 export const deleteJob = createAsyncThunk(
   'jobs/deleteJob',
   async (jobId: string, { rejectWithValue }) => {
@@ -192,7 +196,7 @@ export const deleteJob = createAsyncThunk(
   }
 );
 
-// Post job to social media
+// Post job to social media (example integration)
 export const postJobToSocial = createAsyncThunk(
   'jobs/postToSocial',
   async ({ jobId, platform }: { jobId: string; platform: 'instagram' | 'linkedin' }, { rejectWithValue }) => {

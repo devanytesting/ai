@@ -1,7 +1,13 @@
+// Hook: detect if viewport is considered mobile using matchMedia
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
+/**
+ * useIsMobile
+ * Returns true when window width is below MOBILE_BREAKPOINT.
+ * Uses matchMedia to subscribe to viewport changes.
+ */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
 

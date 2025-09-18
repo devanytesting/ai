@@ -1,3 +1,4 @@
+// Dedicated sign-in page with marketing panel
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SignInForm } from '../components/auth/SignInForm';

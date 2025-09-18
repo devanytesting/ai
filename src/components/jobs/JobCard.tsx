@@ -1,3 +1,4 @@
+// Presentational card for a job requisition with actions
 import React from "react";
 import {
   Calendar,
@@ -22,6 +23,14 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+/**
+ * Props for JobCard
+ * - job: requisition item to render
+ * - onViewDetails/onEditJob/onDeleteJob: handlers for parent-controlled modals
+ * - onUploadResumes/onViewMatched: resume flows by job id
+ * - onPostToSocial: share to social platforms
+ * - onCreateJobPost: convert requisition to job post
+ */
 interface JobCardProps {
   job: Job;
   onViewDetails: (job: Job) => void;
@@ -43,6 +52,7 @@ export const JobCard: React.FC<JobCardProps> = ({
   onDeleteJob,
   onCreateJobPost,
 }) => {
+  // Format date strings for presentation
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
       month: "short",

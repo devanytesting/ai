@@ -1,4 +1,4 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+// Simple landing placeholder; app routes redirect to auth/dashboard
 
 const Index = () => {
   return (

@@ -1,3 +1,4 @@
+// App composition: routing, providers, and protected/public route guards
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,18 +15,22 @@ import { DashboardPage } from './pages/DashboardPage';
 import { Layout } from './components/layout/Layout';
 import NotFound from "./pages/NotFound";
 
+// Single shared React Query client instance
 const queryClient = new QueryClient();
 
+// Wrapper that redirects unauthenticated users to sign-in
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
 };
 
+// Wrapper that keeps authenticated users out of public pages
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" />;
 };
 
+// Main app content: providers + routes
 const AppContent = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -33,6 +38,7 @@ const AppContent = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Auth routes */}
           <Route path="/auth" element={<Navigate to="/signin" />} />
           <Route path="/signin" element={
             <PublicRoute>
@@ -44,6 +50,7 @@ const AppContent = () => (
               <SignUpPage />
             </PublicRoute>
           } />
+          {/* Protected application area */}
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Layout>
@@ -51,6 +58,7 @@ const AppContent = () => (
               </Layout>
             </ProtectedRoute>
           } />
+          {/* Default and 404 */}
           <Route path="/" element={<Navigate to="/signin" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -59,6 +67,7 @@ const AppContent = () => (
   </QueryClientProvider>
 );
 
+// Redux provider and persisted store gate
 const App = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

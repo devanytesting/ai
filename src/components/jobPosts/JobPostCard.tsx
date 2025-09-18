@@ -1,3 +1,4 @@
+// Presentational card for a job post with actions and status badges
 import React from "react";
 import {
   Calendar,
@@ -22,6 +23,13 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+/**
+ * Props for JobPostCard
+ * - jobPost: the post to display
+ * - onViewDetails/onEditJobPost/onDeleteJobPost: UI actions handled by parent
+ * - onPublishJobPost: triggers publish flow (opens modal in parent)
+ * - onRegenerateDescription: triggers AI regeneration
+ */
 interface JobPostCardProps {
   jobPost: JobPost;
   onViewDetails: (jobPost: JobPost) => void;
@@ -39,6 +47,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
   onPublishJobPost,
   onRegenerateDescription,
 }) => {
+  // Format dates for UI
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
@@ -46,6 +55,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
       year: "numeric",
     });
 
+  // Map status to tailwind classes
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'published':
@@ -59,6 +69,7 @@ export const JobPostCard: React.FC<JobPostCardProps> = ({
     }
   };
 
+  // Check if post is expired
   const isExpired = new Date(jobPost.expires_at) < new Date();
 
   return (

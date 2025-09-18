@@ -1,7 +1,9 @@
+// Toast state container with reducer and imperative helpers
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
+// Only one toast visible at a time; remove after long delay unless dismissed
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
 
@@ -52,6 +54,7 @@ interface State {
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
+// Schedule a toast for removal after TOAST_REMOVE_DELAY
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
     return;
@@ -68,6 +71,7 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout);
 };
 
+// Reducer driving toast state transitions
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
@@ -85,8 +89,7 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action;
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
+      // Side effect: enqueue removal of specific or all toasts
       if (toastId) {
         addToRemoveQueue(toastId);
       } else {
@@ -121,8 +124,10 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
+// Subscribers to in-memory toast state
 const listeners: Array<(state: State) => void> = [];
 
+// In-memory state, not using context to avoid rerenders for non-consumers
 let memoryState: State = { toasts: [] };
 
 function dispatch(action: Action) {
@@ -134,6 +139,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">;
 
+// Create and show a toast; returns imperative helpers
 function toast({ ...props }: Toast) {
   const id = genId();
 
@@ -163,6 +169,7 @@ function toast({ ...props }: Toast) {
   };
 }
 
+// Hook to consume current toasts and helpers
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
 

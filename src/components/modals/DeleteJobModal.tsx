@@ -1,3 +1,4 @@
+// Modal: confirm deletion of a job requisition
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { useAppDispatch } from '../../hooks/redux';
@@ -6,6 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Job } from '../../features/jobs/jobsSlice';
 
+/**
+ * Props for DeleteJobModal
+ */
 interface DeleteJobModalProps {
   job: Job | null;
   isOpen: boolean;
@@ -15,6 +19,7 @@ interface DeleteJobModalProps {
 export const DeleteJobModal: React.FC<DeleteJobModalProps> = ({ job, isOpen, onClose }) => {
   const dispatch = useAppDispatch();
 
+  // Confirm and dispatch deletion
   const handleDelete = async () => {
     if (!job?.id) return;
 

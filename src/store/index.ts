@@ -1,3 +1,4 @@
+// Redux store configuration with redux-persist
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -8,14 +9,14 @@ import resumesSlice from '../features/resumes/resumesSlice';
 import jobPostsSlice from '../features/jobPosts/jobPostsSlice';
 import resumeAnalysisSlice from '../features/resumeAnalysis/resumeAnalysisSlice';
 
-// Persist configuration
+// Persist configuration: choose storage and which slices to persist
 const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth', 'jobs', 'resumes', 'jobPosts', 'resumeAnalysis'], // Persist all slices
 };
 
-// Combine reducers
+// Combine all feature reducers into a single root reducer
 const rootReducer = combineReducers({
   auth: authSlice,
   jobs: jobsSlice,
@@ -24,7 +25,7 @@ const rootReducer = combineReducers({
   resumeAnalysis: resumeAnalysisSlice,
 });
 
-// Create persisted reducer
+// Wrap root reducer with persistence support
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
@@ -39,5 +40,6 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+// Inferred types for typed hooks
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

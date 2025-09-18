@@ -1,3 +1,4 @@
+// Modal: confirm deletion of a job post
 import React from 'react';
 import { useAppDispatch } from '../../hooks/redux';
 import { deleteJobPost } from '../../features/jobPosts/jobPostsSlice';
@@ -12,6 +13,9 @@ import {
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 
+/**
+ * Props for DeleteJobPostModal
+ */
 interface DeleteJobPostModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -25,6 +29,7 @@ export const DeleteJobPostModal: React.FC<DeleteJobPostModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
 
+  // Confirm and dispatch deletion, show toast feedback
   const handleDelete = async () => {
     if (!jobPost) return;
 
