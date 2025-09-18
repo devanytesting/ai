@@ -1,9 +1,12 @@
 // Axios API client: base URL, auth token injection, and error handling
 import axios from 'axios';
 
+// Resolve base URL from Vite env with fallback
+const baseURL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8000';
+
 // Create centralized Axios instance used across the app
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000', // Replace with your actual API base URL
+  baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -30,7 +33,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
-      window.location.href = '/login';
+      window.location.href = '/signin';
     }
     return Promise.reject(error);
   }
